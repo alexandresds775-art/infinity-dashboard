@@ -100,8 +100,15 @@ function st(msg,cor){var e=document.getElementById('status');e.textContent=msg;e
 function carregar(){
 st('⏳ Carregando...','yellow');
 try{var c=localStorage.getItem(CACHE_KEY);if(c){DADOS=JSON.parse(c);st('📦 Cache ('+DADOS.length+')','yellow');aplicar()}}catch(e){}
-var range=encodeURIComponent('Respostas ao formulário 1')+'!A2:H200';
+
+var tentativas=['Form_Responses!A2:H300','Respostas ao formulário 1!A2:H300'];
+var tentou=0;
+
+function tentar(){
+if(tentou>=tentativas.length){st('⚠️ API sem dados','red');return}
+var range=encodeURIComponent(tentativas[tentou]);
 var url='https://sheets.googleapis.com/v4/spreadsheets/'+SPREADSHEET_ID+'/values/'+range+'?key='+API_KEY;
+tentou++;
 fetch(url).then(function(r){return r.json()}).then(function(d){
 if(d.values&&d.values.length>0){
 var dados=[];
@@ -112,11 +119,11 @@ var csat=parseInt(col[6]);if(isNaN(csat)||csat<1||csat>5)csat=5;
 dados.push({d:(col[0]||'').split(' ')[0],n:nps,c:csat,p:col[2]||'',e:col[5]||'',m:col[4]||'',t:col[7]||''});
 }
 if(dados.length>0){DADOS=dados;try{localStorage.setItem(CACHE_KEY,JSON.stringify(dados))}catch(e){}st('✅ Ao vivo ('+dados.length+')','green');aplicar()}
-else st('⚠️ API sem dados','red');
-}else st('⚠️ API sem dados','red');
-}).catch(function(e){
-st('⚠️ Erro na API','red');
-});
+else tentar();
+}else tentar();
+}).catch(function(){tentar()});
+}
+tentar();
 }
 
 function filtrar(t,b){filtro=t;document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});b.classList.add('active');aplicar()}
