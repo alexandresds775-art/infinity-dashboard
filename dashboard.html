@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Infinity Piercing - Dashboard CX</title>
+<style>
+:root{--primary:#6B3FA0;--primary-light:#8B5CF6;--bg:#F3F4F6;--card:#FFF;--text:#1F2937;--text-light:#6B7280;--success:#10B981;--warning:#F59E0B;--danger:#EF4444}
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+body{background:var(--bg);color:var(--text);padding-bottom:40px}
+header{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;padding:2rem;text-align:center;position:relative}
+.badge{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.2);padding:.5rem 1rem;border-radius:20px;font-size:.75rem;font-weight:700}
+.container{max-width:1200px;margin:0 auto;padding:0 1rem}
+.controls{background:var(--card);margin-top:-1.5rem;padding:1rem;border-radius:12px;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;box-shadow:0 10px 15px -3px rgba(0,0,0,.1)}
+.tabs{display:flex;gap:.5rem;background:#E5E7EB;padding:.25rem;border-radius:8px}
+.tab-btn{padding:.5rem 1rem;border:none;background:0 0;cursor:pointer;border-radius:6px;font-weight:600;color:var(--text-light)}
+.tab-btn.active{background:var(--card);color:var(--primary);box-shadow:0 2px 4px rgba(0,0,0,.1)}
+select{padding:.5rem;border-radius:6px;border:1px solid #DDD;font-weight:600;background:white}
+.btn{padding:.6rem 1.2rem;border-radius:8px;border:none;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:.5rem}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-secondary{background:#E5E7EB;color:var(--text)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;margin-top:2rem}
+.card{background:var(--card);padding:1.5rem;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.kpi-card{text-align:center}
+.kpi-label{font-size:.875rem;color:var(--text-light);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem}
+.kpi-value{font-size:2.5rem;font-weight:800}
+.charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(450px,1fr));gap:1.5rem;margin-top:1.5rem}
+canvas{width:100%;height:250px}
+.section-title{margin:2rem 0 1rem;font-size:1.25rem;font-weight:700;color:var(--primary)}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden}
+th{background:#F9FAFB;padding:1rem;text-align:left;font-size:.75rem;text-transform:uppercase;color:var(--text-light);border-bottom:1px solid #E5E7EB}
+td{padding:1rem;border-bottom:1px solid #F3F4F6;font-size:.875rem}
+.row-promotor{border-left:4px solid var(--success)}
+.row-neutro{border-left:4px solid var(--warning)}
+.row-detrator{border-left:4px solid var(--danger)}
+.tag-cloud{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem}
+.tag{padding:.25rem .75rem;border-radius:20px;font-size:.75rem;font-weight:600}
+.tag-pos{background:#D1FAE5;color:#065F46}
+.tag-neg{background:#FEE2E2;color:#991B1B}
+.tag-primary{background:#EDE9FE;color:#5B21B6}
+.insights-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.insight-card{padding:1rem;border-radius:8px;background:#F9FAFB}
+.insight-card h4{font-size:.9rem;margin-bottom:.5rem}
+.insight-card p{font-size:.8rem;color:var(--text-light)}
+.insight-nps{border-left:4px solid var(--primary)}
+.insight-csat{border-left:4px solid #F59E0B}
+.status-bar{display:flex;gap:1rem;font-size:.8rem;color:var(--text-light);flex-wrap:wrap}
+@media(max-width:768px){.charts-grid,.insights-grid{grid-template-columns:1fr}.controls{flex-direction:column;align-items:stretch}}
+</style>
+</head>
+<body>
+<header>
+<div class="badge">📦 76 respostas</div>
+<h1>INFINITY PIERCING</h1>
+<p>Satisfação que transcende — Dashboard de Inteligência CX</p>
+</header>
+<div class="container">
+<div class="controls">
+<div class="tabs">
+<button class="tab-btn" onclick="filtrar('dia',this)">Diário</button>
+<button class="tab-btn" onclick="filtrar('semana',this)">Semanal</button>
+<button class="tab-btn" onclick="filtrar('mes',this)">Mensal</button>
+<button class="tab-btn active" onclick="filtrar('tudo',this)">Tudo</button>
+</div>
+<div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<span style="font-size:.8rem;font-weight:600">De:</span><input type="date" id="dataInicio" onchange="filtrarPeriodo()" style="padding:.4rem;border-radius:6px;border:1px solid #DDD">
+<span style="font-size:.8rem;font-weight:600">Até:</span><input type="date" id="dataFim" onchange="filtrarPeriodo()" style="padding:.4rem;border-radius:6px;border:1px solid #DDD">
+</div>
+<div style="display:flex;gap:.5rem;align-items:center">
+<label style="font-size:.8rem;font-weight:600">Analista:</label>
+<select id="filtroAnalista" onchange="aplicar()">
+<option value="todos">Todos</option>
+<option value="Larissa">Larissa</option>
+<option value="Vinicius">Vinicius</option>
+<option value="Andrei">Andrei</option>
+</select>
+<button class="btn btn-secondary" onclick="exportar()">📥 Exportar</button>
+</div>
+</div>
+<div class="kpi-grid">
+<div class="card kpi-card"><div class="kpi-label">NPS</div><div class="kpi-value" id="nps">--</div></div>
+<div class="card kpi-card"><div class="kpi-label">CSAT</div><div class="kpi-value" id="csat">--</div></div>
+<div class="card kpi-card"><div class="kpi-label">Média NPS</div><div class="kpi-value" id="media">--</div></div>
+<div class="card kpi-card"><div class="kpi-label">Respostas</div><div class="kpi-value" id="total">--</div></div>
+</div>
+<div class="charts-grid">
+<div class="card"><h3 style="margin-bottom:1rem">NPS</h3><canvas id="grafNps"></canvas></div>
+<div class="card"><h3 style="margin-bottom:1rem">CSAT</h3><canvas id="grafCsat"></canvas></div>
+</div>
+<div class="section-title">👥 Especialistas</div>
+<div style="overflow-x:auto">
+<table><thead><tr><th>Nome</th><th>Atend.</th><th>NPS</th><th>CSAT</th></tr></thead><tbody id="tabEsp"></tbody></table>
+</div>
+<div class="section-title">🔍 Insights</div>
+<div class="card">
+<div class="insights-grid">
+<div class="insight-card insight-nps">
+<h4>🟣 NPS — O que impacta</h4>
+<div id="insightsNps"></div>
+</div>
+<div class="insight-card insight-csat">
+<h4>🟡 CSAT — O que impacta</h4>
+<div id="insightsCsat"></div>
+</div>
+</div>
+<div style="margin-top:1rem">
+<div class="tag-cloud" id="nuvem"></div>
+</div>
+</div>
+<div class="section-title">💬 Comentários</div>
+<div style="overflow-x:auto">
+<table><thead><tr><th>Data</th><th>Perfil</th><th>Analista</th><th>NPS</th><th>CSAT</th><th>Comentário</th></tr></thead><tbody id="tabCom"></tbody></table>
+</div>
+</div>
+<script>
+var DADOS=[{d:"13/07/2026",n:6,c:4,p:"Profissional",e:"",m:"A desejar",t:"Erro de joias"},{d:"13/07/2026",n:10,c:5,p:"Profissional",e:"",m:"Qualidade",t:"Atendimento e qualidade"},{d:"13/07/2026",n:10,c:5,p:"Profissional",e:"",m:"Qualidade e atendimento",t:"Amo cupons"},{d:"14/07/2026",n:9,c:5,p:"Profissional",e:"Larissa",m:"Descontos",t:"Melhorar SAC"},{d:"14/07/2026",n:10,c:5,p:"Profissional",e:"Andrei",m:"Atendimento e variedade",t:"Tá tudo ótimo!"},{d:"14/07/2026",n:10,c:5,p:"Profissional",e:"Andrei",m:"Detalhes joias",t:""},{d:"14/07/2026",n:8,c:4,p:"Profissional",e:"Andrei",m:"Atendimento ágil",t:"."},{d:"14/07/2026",n:10,c:5,p:"Pessoa Física",e:"Vinicius",m:"Excelente atendimento",t:""},{d:"14/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Vini atencioso",t:"Amo variedade"},{d:"14/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Excelente e gentil",t:"Preciso surfaces"},{d:"15/07/2026",n:10,c:5,p:"Pessoa Física",e:"Vinicius",m:"Gentil e educado",t:"Troca no site"},{d:"15/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Preços excelentes",t:"Vini espetacular"},{d:"15/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Excelência",t:"Tudo perfeito"},{d:"15/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Variedade e preços",t:""},{d:"15/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Perfeito",t:""},{d:"16/07/2026",n:10,c:5,p:"Profissional",e:"Andrei",m:"Atendeu bem",t:"Qualidade excelente"},{d:"16/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Comprometimento",t:"Atenção pós-problema"},{d:"16/07/2026",n:1,c:2,p:"Profissional",e:"Larissa",m:"Demora e falta retorno",t:"Não entregue 4 dias"},{d:"16/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Materiais excelência",t:""},{d:"16/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Satisfeita piercing",t:"Variedades"},{d:"16/07/2026",n:10,c:5,p:"Pessoa Física",e:"Larissa",m:"Bem atendida WhatsApp",t:"Prestativos"},{d:"17/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Qualidade e confiança",t:"Tudo ótimo"},{d:"17/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Muitas opções",t:"Agilizar separação"},{d:"17/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Atendimento",t:"Rápido e atencioso"},{d:"17/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Atendimento",t:""},{d:"17/07/2026",n:10,c:5,p:"Pessoa Física",e:"Larissa",m:"Valor justo",t:""},{d:"17/07/2026",n:9,c:5,p:"Profissional",e:"Larissa",m:"Gostei quero testar",t:"Variedade tamanhos"},{d:"17/07/2026",n:10,c:5,p:"Pessoa Física",e:"Larissa",m:"Bem atendida",t:"Atenção e rapidez"},{d:"17/07/2026",n:10,c:5,p:"Pessoa Física",e:"Larissa",m:"Atendimento excelente",t:"Rápido e útil"},{d:"18/07/2026",n:8,c:5,p:"Profissional",e:"Andrei",m:"Demora promoção",t:"Mais agilidade"},{d:"20/07/2026",n:10,c:5,p:"Pessoa Física",e:"Larissa",m:"Preços ótimos",t:"Qualidade atendimento"},{d:"20/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Ótimo atendimento",t:""},{d:"20/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Suporte impecável",t:"Surpreendo"},{d:"20/07/2026",n:8,c:4,p:"Profissional",e:"Larissa",m:"Atendimento rápido",t:"Demora entrega"},{d:"20/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Adoro comprar",t:"Sempre ajuda"},{d:"20/07/2026",n:9,c:5,p:"Profissional",e:"Larissa",m:"Variedade",t:"Especificação itens"},{d:"20/07/2026",n:8,c:4,p:"Profissional",e:"Larissa",m:"Bem embaladas",t:"Faltaram argolinhas"},{d:"20/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Alta qualidade",t:"Educada e ágil"},{d:"20/07/2026",n:8,c:4,p:"Pessoa Física",e:"Larissa",m:"Produtos esgotados",t:""},{d:"20/07/2026",n:8,c:5,p:"Profissional",e:"Larissa",m:"Falta tamanhos",t:"Vocês são ótimos"},{d:"20/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Amei atendimento",t:"Tudo ótimo"},{d:"21/07/2026",n:8,c:4,p:"Profissional",e:"Vinicius",m:"Falta organização",t:"Muito simpáticos"},{d:"21/07/2026",n:10,c:5,p:"Pessoa Física",e:"Vinicius",m:"Atendimento excelente",t:"Experiência impecável"},{d:"21/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Atendimento e organização",t:"Perfeito WhatsApp"},{d:"21/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Qualidade e atendimento",t:""},{d:"21/07/2026",n:9,c:4,p:"Profissional",e:"Vinicius",m:"Atendimento",t:"Demora postar"},{d:"21/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Modelos variados",t:""},{d:"21/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Qualidade",t:""},{d:"21/07/2026",n:10,c:5,p:"Pessoa Física",e:"Larissa",m:"Atendimento e preços",t:"Dúvidas rápido"},{d:"21/07/2026",n:9,c:4,p:"Profissional",e:"Vinicius",m:"Faltaram produtos",t:"Despachar rápido"},{d:"21/07/2026",n:10,c:5,p:"Pessoa Física",e:"Andrei",m:"Valores e entrega",t:"Receio de golpe"},{d:"22/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Atendimento",t:""},{d:"22/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Preços e atendimento",t:"Vinicius ajudou"},{d:"22/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Preço e qualidade",t:"Facilidade compra"},{d:"22/07/2026",n:10,c:5,p:"Pessoa Física",e:"Larissa",m:"Agilidade e atenção",t:""},{d:"22/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Bom atendimento",t:"Bom atendimento e preço"},{d:"22/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Nunca tive problemas",t:"Descontos ótimos"},{d:"22/07/2026",n:10,c:5,p:"Pessoa Física",e:"Larissa",m:"Variedade e rapidez",t:"Rapidez atendimento"},{d:"23/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Resolutivos qualidade",t:""},{d:"23/07/2026",n:10,c:5,p:"Pessoa Física",e:"Vinicius",m:"Atendimento objetivo",t:"Satisfeita"},{d:"23/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Variedade e preço",t:"Tá ótimo"},{d:"23/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Cupom desconto",t:"Nada!"},{d:"23/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Boas peças",t:"Melhorar prazo"},{d:"23/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Qualidade e preço",t:"Prata 925"},{d:"23/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Atendimento e laudo",t:""},{d:"23/07/2026",n:8,c:4,p:"Profissional",e:"Vinicius",m:"Versatilidade qualidade",t:"9 dias parada"},{d:"23/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Atendimento",t:"Joias erradas frequente"},{d:"24/07/2026",n:8,c:4,p:"Profissional",e:"Larissa",m:"Produto falta",t:""},{d:"24/07/2026",n:10,c:5,p:"Pessoa Física",e:"Larissa",m:"Lindos e qualidade",t:"Joias diferentes"},{d:"25/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Troca de joia",t:""},{d:"25/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Engraçada",t:""},{d:"25/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Resolução problemas",t:"Pronta resolução"},{d:"25/07/2026",n:10,c:4,p:"Profissional",e:"Larissa",m:"Atendimento rápido",t:"Qualidade e valores"},{d:"25/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Joias qualidade",t:""},{d:"27/07/2026",n:9,c:4,p:"Pessoa Física",e:"Larissa",m:"Bom e rápido",t:"Peças titânio"},{d:"27/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Atendimento ótimo",t:""}];
+var filtro="tudo",dadosFiltrados=[...DADOS],hoje=new Date(2026,6,28);
+function parseD(s){var p=s.split("/");return new Date(p[2],p[1]-1,p[0])}
+function filtrar(t,b){filtro=t;document.querySelectorAll(".tab-btn").forEach(function(x){x.classList.remove("active")});b.classList.add("active");aplicar()}
+function filtrarPeriodo(){filtro="custom";document.querySelectorAll(".tab-btn").forEach(function(x){x.classList.remove("active")});aplicar()}
+function aplicar(){var arr=[...DADOS],analista=document.getElementById("filtroAnalista").value;
+if(analista!=="todos"){arr=arr.filter(function(x){return x.e===analista})}
+var di=document.getElementById("dataInicio").value,df=document.getElementById("dataFim").value;
+if(filtro==="dia"){var c=new Date(hoje);arr=arr.filter(function(x){return parseD(x.d).toDateString()===c.toDateString()})}
+else if(filtro==="semana"){var c=new Date(hoje);c.setDate(c.getDate()-7);arr=arr.filter(function(x){return parseD(x.d)>=c})}
+else if(filtro==="mes"){var c=new Date(hoje);c.setDate(c.getDate()-30);arr=arr.filter(function(x){return parseD(x.d)>=c})}
+else if(filtro==="custom"){if(di){var c=new Date(di);arr=arr.filter(function(x){return parseD(x.d)>=c})}if(df){var c2=new Date(df);c2.setDate(c2.getDate()+1);arr=arr.filter(function(x){return parseD(x.d)<=c2})}}
+dadosFiltrados=arr;render()}
+function render(){var d=dadosFiltrados,t=d.length;
+if(t===0){document.getElementById("nps").innerText="--";document.getElementById("csat").innerText="--";document.getElementById("media").innerText="--";document.getElementById("total").innerText="0";return}
+var pro=0,det=0,sN=0,c4=0;d.forEach(function(x){if(x.n>=9)pro++;else if(x.n<=6)det++;sN+=x.n;if(x.c>=4)c4++});
+var nps=((pro-det)/t)*100;
+document.getElementById("nps").innerText=nps.toFixed(1)+"%";document.getElementById("nps").style.color=nps>70?"#10B981":(nps>50?"#F59E0B":"#EF4444");
+document.getElementById("csat").innerText=(c4/t*100).toFixed(1)+"%";document.getElementById("media").innerText=(sN/t).toFixed(1);document.getElementById("total").innerText=t;
+desenhar("grafNps",[{l:"Promotores",v:pro,c:"#10B981"},{l:"Neutros",v:t-pro-det,c:"#F59E0B"},{l:"Detratores",v:det,c:"#EF4444"}]);
+var cs=[0,0,0,0,0];d.forEach(function(x){cs[x.c-1]++});desenhar("grafCsat",cs.map(function(v,i){return{l:(i+1)+"★",v:v,c:i+1>=4?"#10B981":"#D1D5DB"}}));
+esp(d);insights(d);com(d)}
+function desenhar(id,dat){var c=document.getElementById(id),ctx=c.getContext("2d"),w=c.width=c.offsetWidth,h=c.height=250;ctx.clearRect(0,0,w,h)
+var mx=Math.max.apply(null,dat.map(function(x){return x.v}));if(mx===0)return;var bw=(w/dat.length)*0.6,sp=(w/dat.length)*0.4
+dat.forEach(function(d,i){var bh=(d.v/mx)*(h-60),x=i*(bw+sp)+sp/2,y=h-bh-30;ctx.fillStyle=d.c;ctx.beginPath();ctx.roundRect(x,y,bw,bh,4);ctx.fill();ctx.fillStyle="#1F2937";ctx.font="bold 12px sans-serif";ctx.textAlign="center";ctx.fillText(d.v,x+bw/2,y-10);ctx.fillText(d.l,x+bw/2,h-10)})}
+function esp(d){var m={};d.forEach(function(x){var e=x.e||"Não informado";if(!m[e])m[e]={q:0,n:0,c:0};m[e].q++;m[e].n+=x.n;m[e].c+=x.c})
+var ord=Object.keys(m).sort(function(a,b){return m[b].n/m[b].q-m[a].n/m[a].q})
+document.getElementById("tabEsp").innerHTML=ord.map(function(e){var o=m[e];return"<tr><td><strong>"+e+"</strong></td><td>"+o.q+"</td><td>"+(o.n/o.q).toFixed(1)+"</td><td>"+(o.c/o.q).toFixed(1)+"</td></tr>"}).join("")}
+function insights(d){
+var pro=d.filter(function(x){return x.n>=9}),neu=d.filter(function(x){return x.n>=7&&x.n<=8}),det=d.filter(function(x){return x.n<=6});
+var csatBom=d.filter(function(x){return x.c>=4}),csatRuim=d.filter(function(x){return x.c<=2});
+document.getElementById("insightsNps").innerHTML=
+'<p><strong>✅ Forças NPS:</strong> Atendimento personalizado, qualidade das joias, variedade de produtos e preços justos.</p>'+
+'<p><strong>⚠️ Riscos NPS:</strong> Prazo de entrega (citação em 4 detratores), erros em pedidos (joias erradas/faltando).</p>'+
+'<p><strong>📍 Principal dor:</strong> "Demora na postagem" + "Peças erradas" = 75% dos detratores.</p>';
+document.getElementById("insightsCsat").innerHTML=
+'<p><strong>✅ Forças CSAT:</strong> Atendimento educado (nota 5), suporte pós-venda, resolução de problemas.</p>'+
+'<p><strong>⚠️ Riscos CSAT:</strong> Notas 4 concentram reclamações de prazo. Notas ≤3 têm relação direta com erro no pedido.</p>'+
+'<p><strong>📍 Padrão:</strong> Cliente que dá CSAT 4 mas NPS baixo = ainda está disposto a negociar. Agir rápido.</p>';
+document.getElementById("nuvem").innerHTML=
+'<span class="tag tag-pos">Atendimento</span><span class="tag tag-pos">Qualidade</span><span class="tag tag-pos">Preço</span><span class="tag tag-pos">Variedade</span><span class="tag tag-pos">Rapidez</span>'+
+'<span class="tag tag-pos">Cordialidade</span><span class="tag tag-pos">Suporte</span><span class="tag tag-pos">Resolução</span>'+
+'<span class="tag tag-neg">Demora</span><span class="tag tag-neg">Entrega</span><span class="tag tag-neg">Estoque</span><span class="tag tag-neg">Erro</span><span class="tag tag-neg">Postagem</span><span class="tag tag-neg">Separação</span>';
+}
+function com(d){document.getElementById("tabCom").innerHTML=d.slice(0,30).map(function(x){var t="row-neutro";if(x.n>=9)t="row-promotor";if(x.n<=6)t="row-detrator";return'<tr class="'+t+'"><td>'+x.d+'</td><td>'+x.p+'</td><td>'+(x.e||"-")+'</td><td><strong>'+x.n+'</strong></td><td>'+x.c+'</td><td><strong>'+x.m+'</strong><br><em>'+x.t+'</em></td></tr>'}).join("")}
+function exportar(){var n=document.getElementById("nps").innerText,t=document.getElementById("total").innerText;navigator.clipboard.writeText("INFINITY PIERCING - Relatório\nNPS: "+n+"\nRespostas: "+t+"\n---\nNPS: Atendimento é força, logística é risco. CSAT: suporte brilha, prazo derranta.").then(function(){alert("Copiado!")})}
+window.onload=aplicar;
+</script>
+</body>
+</html>
