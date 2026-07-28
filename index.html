@@ -99,22 +99,21 @@ function st(msg,cor){var e=document.getElementById('status');e.textContent=msg;e
 
 function carregar(){
 st('⏳ Carregando...','yellow');
-// Tenta cache primeiro
 try{var c=localStorage.getItem(CACHE_KEY);if(c){DADOS=JSON.parse(c);st('📦 Cache ('+DADOS.length+')','yellow');aplicar()}}catch(e){}
-// Busca da API do Google Sheets
-var url='https://sheets.googleapis.com/v4/spreadsheets/'+SPREADSHEET_ID+'/values/%27Respostas%20ao%20formul%C3%A1rio%201%27!A:H?key='+API_KEY;
+var range=encodeURIComponent('Respostas ao formulário 1')+'!A2:H200';
+var url='https://sheets.googleapis.com/v4/spreadsheets/'+SPREADSHEET_ID+'/values/'+range+'?key='+API_KEY;
 fetch(url).then(function(r){return r.json()}).then(function(d){
-if(d.values&&d.values.length>1){
+if(d.values&&d.values.length>0){
 var dados=[];
-for(var i=1;i<d.values.length;i++){
+for(var i=0;i<d.values.length;i++){
 var col=d.values[i];if(!col||col.length<4)continue;
 var nps=parseInt(col[3]);if(isNaN(nps)||nps<0||nps>10)continue;
 var csat=parseInt(col[6]);if(isNaN(csat)||csat<1||csat>5)csat=5;
 dados.push({d:(col[0]||'').split(' ')[0],n:nps,c:csat,p:col[2]||'',e:col[5]||'',m:col[4]||'',t:col[7]||''});
 }
 if(dados.length>0){DADOS=dados;try{localStorage.setItem(CACHE_KEY,JSON.stringify(dados))}catch(e){}st('✅ Ao vivo ('+dados.length+')','green');aplicar()}
-else throw'vazio';
-}else throw'vazio';
+else st('⚠️ API sem dados','red');
+}else st('⚠️ API sem dados','red');
 }).catch(function(e){
 st('⚠️ Erro na API','red');
 });
