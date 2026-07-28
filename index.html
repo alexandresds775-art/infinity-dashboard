@@ -9,7 +9,10 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
 body{background:var(--bg);color:var(--text);padding-bottom:40px}
 header{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;padding:2rem;text-align:center;position:relative}
-.badge{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.2);padding:.5rem 1rem;border-radius:20px;font-size:.75rem;font-weight:700}
+.badge{position:absolute;top:1rem;right:1rem;padding:.5rem 1rem;border-radius:20px;font-size:.75rem;font-weight:700}
+.badge-green{background:rgba(16,185,129,.3)}
+.badge-yellow{background:rgba(245,158,11,.3)}
+.badge-red{background:rgba(239,68,68,.3)}
 .container{max-width:1200px;margin:0 auto;padding:0 1rem}
 .controls{background:var(--card);margin-top:-1.5rem;padding:1rem;border-radius:12px;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;box-shadow:0 10px 15px -3px rgba(0,0,0,.1)}
 .tabs{display:flex;gap:.5rem;background:#E5E7EB;padding:.25rem;border-radius:8px}
@@ -19,28 +22,28 @@ select{padding:.5rem;border-radius:6px;border:1px solid #DDD;font-weight:600;bac
 .btn{padding:.6rem 1.2rem;border-radius:8px;border:none;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:.5rem}
 .btn-primary{background:var(--primary);color:#fff}
 .btn-secondary{background:#E5E7EB;color:var(--text)}
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;margin-top:2rem}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1.5rem}
 .card{background:var(--card);padding:1.5rem;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
 .kpi-card{text-align:center}
-.kpi-label{font-size:.875rem;color:var(--text-light);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem}
+.kpi-label{font-size:.75rem;color:var(--text-light);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem}
 .kpi-value{font-size:2.5rem;font-weight:800}
-.charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(450px,1fr));gap:1.5rem;margin-top:1.5rem}
-canvas{width:100%;height:250px}
+.charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:1.5rem;margin-top:1.5rem}
+canvas{width:100%!important;height:220px!important}
 .section-title{margin:2rem 0 1rem;font-size:1.25rem;font-weight:700;color:var(--primary)}
 table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden}
-th{background:#F9FAFB;padding:1rem;text-align:left;font-size:.75rem;text-transform:uppercase;color:var(--text-light);border-bottom:1px solid #E5E7EB}
-td{padding:1rem;border-bottom:1px solid #F3F4F6;font-size:.875rem}
-.row-promotor{border-left:4px solid var(--success)}
-.row-neutro{border-left:4px solid var(--warning)}
-.row-detrator{border-left:4px solid var(--danger)}
-.tag-cloud{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem}
+th{background:#F9FAFB;padding:.75rem;text-align:left;font-size:.7rem;text-transform:uppercase;color:var(--text-light);border-bottom:1px solid #E5E7EB}
+td{padding:.75rem;border-bottom:1px solid #F3F4F6;font-size:.8rem}
+.row-promotor{background:#ECFDF5}
+.row-neutro{background:#FFFBEB}
+.row-detrator{background:#FEF2F2}
+.tag-cloud{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
 .tag{padding:.25rem .75rem;border-radius:20px;font-size:.75rem;font-weight:600}
 .tag-pos{background:#D1FAE5;color:#065F46}
 .tag-neg{background:#FEE2E2;color:#991B1B}
 .insights-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 .insight-card{padding:1rem;border-radius:8px;background:#F9FAFB}
-.insight-card h4{font-size:.9rem;margin-bottom:.5rem}
-.insight-card p{font-size:.8rem;color:var(--text-light)}
+.insight-card h4{font-size:.85rem;margin-bottom:.5rem}
+.insight-card p{font-size:.75rem;color:var(--text-light)}
 .insight-nps{border-left:4px solid var(--primary)}
 .insight-csat{border-left:4px solid #F59E0B}
 @media(max-width:768px){.charts-grid,.insights-grid{grid-template-columns:1fr}.controls{flex-direction:column;align-items:stretch}}
@@ -48,7 +51,7 @@ td{padding:1rem;border-bottom:1px solid #F3F4F6;font-size:.875rem}
 </head>
 <body>
 <header>
-<div class="badge" id="statusTopo">🔗 Conectando à planilha...</div>
+<div class="badge badge-yellow" id="statusTopo">⏳ Carregando...</div>
 <h1>INFINITY PIERCING</h1>
 <p>Satisfação que transcende — Dashboard de Inteligência CX</p>
 </header>
@@ -61,18 +64,19 @@ td{padding:1rem;border-bottom:1px solid #F3F4F6;font-size:.875rem}
 <button class="tab-btn active" onclick="filtrar('tudo',this)">Tudo</button>
 </div>
 <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
-<span style="font-size:.8rem;font-weight:600">De:</span><input type="date" id="dataInicio" onchange="filtrarPeriodo()" style="padding:.4rem;border-radius:6px;border:1px solid #DDD">
-<span style="font-size:.8rem;font-weight:600">Até:</span><input type="date" id="dataFim" onchange="filtrarPeriodo()" style="padding:.4rem;border-radius:6px;border:1px solid #DDD">
+<span style="font-size:.75rem;font-weight:600">De:</span><input type="date" id="dataInicio" style="padding:.35rem;border-radius:6px;border:1px solid #DDD">
+<span style="font-size:.75rem;font-weight:600">Até:</span><input type="date" id="dataFim" style="padding:.35rem;border-radius:6px;border:1px solid #DDD">
+<button class="btn btn-primary" onclick="filtrarPeriodo()" style="padding:.35rem .8rem;font-size:.8rem">Filtrar</button>
 </div>
 <div style="display:flex;gap:.5rem;align-items:center">
-<label style="font-size:.8rem;font-weight:600">Analista:</label>
-<select id="filtroAnalista" onchange="aplicar()">
+<label style="font-size:.75rem;font-weight:600">Analista:</label>
+<select id="filtroAnalista" onchange="aplicar()" style="padding:.35rem">
 <option value="todos">Todos</option>
 <option value="Larissa">Larissa</option>
 <option value="Vinicius">Vinicius</option>
 <option value="Andrei">Andrei</option>
 </select>
-<button class="btn btn-secondary" onclick="exportar()">📥 Exportar</button>
+<button class="btn btn-secondary" onclick="exportar()" style="padding:.35rem .8rem;font-size:.8rem">📥 Exportar</button>
 </div>
 </div>
 <div class="kpi-grid">
@@ -82,119 +86,65 @@ td{padding:1rem;border-bottom:1px solid #F3F4F6;font-size:.875rem}
 <div class="card kpi-card"><div class="kpi-label">Respostas</div><div class="kpi-value" id="total">--</div></div>
 </div>
 <div class="charts-grid">
-<div class="card"><h3 style="margin-bottom:1rem">NPS</h3><canvas id="grafNps"></canvas></div>
-<div class="card"><h3 style="margin-bottom:1rem">CSAT</h3><canvas id="grafCsat"></canvas></div>
+<div class="card"><h3 style="margin-bottom:.5rem;font-size:.9rem">Distribuição NPS</h3><canvas id="grafNps"></canvas></div>
+<div class="card"><h3 style="margin-bottom:.5rem;font-size:.9rem">Distribuição CSAT</h3><canvas id="grafCsat"></canvas></div>
 </div>
-<div class="section-title">👥 Especialistas</div>
-<div style="overflow-x:auto">
-<table><thead><tr><th>Nome</th><th>Atend.</th><th>NPS</th><th>CSAT</th></tr></thead><tbody id="tabEsp"></tbody></table>
+<div class="charts-grid">
+<div class="card"><h3 style="margin-bottom:.5rem;font-size:.9rem">👥 Especialistas</h3><div style="overflow-x:auto"><table><thead><tr><th>Nome</th><th>Atend.</th><th>NPS Médio</th><th>CSAT Médio</th></tr></thead><tbody id="tabEsp"></tbody></table></div></div>
+<div class="card"><h3 style="margin-bottom:.5rem;font-size:.9rem">🔍 Nuvem de Palavras</h3><div class="tag-cloud" id="nuvem"></div></div>
 </div>
-<div class="section-title">🔍 Insights</div>
-<div class="card">
 <div class="insights-grid">
-<div class="insight-card insight-nps"><h4>🟣 NPS — O que impacta</h4><div id="insightsNps"></div></div>
-<div class="insight-card insight-csat"><h4>🟡 CSAT — O que impacta</h4><div id="insightsCsat"></div></div>
-</div>
-<div style="margin-top:1rem"><div class="tag-cloud" id="nuvem"></div></div>
+<div class="insight-card insight-nps"><h4>🟣 NPS</h4><div id="insightsNps"><p style="font-size:.8rem">Carregando...</p></div></div>
+<div class="insight-card insight-csat"><h4>🟡 CSAT</h4><div id="insightsCsat"><p style="font-size:.8rem">Carregando...</p></div></div>
 </div>
 <div class="section-title">💬 Comentários</div>
 <div style="overflow-x:auto">
-<table><thead><tr><th>Data</th><th>Perfil</th><th>Analista</th><th>NPS</th><th>CSAT</th><th>Comentário</th></tr></thead><tbody id="tabCom"></tbody></table>
+<table><thead><tr><th>Data</th><th>Perfil</th><th>Analista</th><th>NPS</th><th>CSAT</th><th>Motivo / Comentário</th></tr></thead><tbody id="tabCom"></tbody></table>
 </div>
 </div>
 <script>
 var CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vRHcKSrSXFBcF8A4fQIR3xxg-7G_PlzA6udtxxfKVpDAP_p1Op1ZHbX8ND8jTgPfgU6Le7MjaYTXRby/pub?output=csv';
-var DADOS=[],filtro="tudo",dadosFiltrados=[],hoje=new Date();
-hoje.setFullYear(2026,6,28);
+var DADOS=[],dadosFiltrados=[],filtro='tudo';
+var hoje=new Date(2026,6,28);
 
 function parseCSV(t){
 var linhas=[],cur=[],campo='',aspas=false;
 for(var i=0;i<t.length;i++){
 var c=t[i];
-if(aspas){
-if(c=='"'){if(i+1<t.length&&t[i+1]=='"'){campo+='"';i++}else{aspas=false}}
-else campo+=c;
-}else{
-if(c=='"')aspas=true;
-else if(c==','){cur.push(campo);campo=''}
-else if(c=='\n'){cur.push(campo);campo='';if(cur.length>1)linhas.push(cur);cur=[]}
-else if(c=='\r'){}
-else campo+=c;
+if(aspas){if(c=='"'){if(i+1<t.length&&t[i+1]=='"'){campo+='"';i++}else aspas=false}else campo+=c}
+else{if(c=='"')aspas=true;else if(c==','){cur.push(campo);campo=''}else if(c=='\n'){cur.push(campo);campo='';if(cur.length>3)linhas.push(cur);cur=[]}else if(c=='\r'){}else campo+=c}
 }
-}
-if(cur.length>1)linhas.push(cur);
-return linhas;
-}
+}if(cur.length>3)linhas.push(cur);return linhas}
 
-function parseData(str){
-var p=str.split(' ')[0].split('/');
-return new Date(p[2],p[1]-1,p[0]);
-}
+function parseD(s){if(!s||s.length<8)return hoje;var p=s.split(' ')[0].split('/');return new Date(p[2],p[1]-1,p[0])}
 
-function carregarDados(){
+function carregar(){
 var st=document.getElementById('statusTopo');
-// Tenta carregar do cache primeiro
-var cache=localStorage.getItem('infinity_cache');
-if(cache){try{DADOS=JSON.parse(cache);st.innerHTML='📦 Dados salvos ('+DADOS.length+' respostas)';aplicar()}catch(e){}}
-// Busca da planilha
+// Tenta fetch
 fetch(CSV_URL).then(function(r){return r.text()}).then(function(txt){
 var linhas=parseCSV(txt);
-if(linhas.length<2)return;
-// Pula header (linha 0), mapeia dados
+if(linhas.length<2)throw'Poucas linhas';
 var dados=[];
 for(var i=1;i<linhas.length;i++){
-var col=linhas[i];
-if(col.length<4)continue;
-var nps=parseInt(col[3])||0,csat=parseInt(col[6])||0;
-if(nps<0||nps>10)continue;
-dados.push({
-d:(col[0]||'').split(' ')[0],
-n:nps,
-c:csat,
-p:col[2]||'',
-e:col[5]||'',
-m:col[4]||'',
-t:col[7]||''
-});
+var col=linhas[i];if(col.length<4)continue;
+var nps=parseInt(col[3]);if(isNaN(nps)||nps<0||nps>10)continue;
+var csat=parseInt(col[6]);if(isNaN(csat)||csat<1||csat>5)csat=5;
+dados.push({d:(col[0]||'').split(' ')[0],n:nps,c:csat,p:col[2]||'',e:col[5]||'',m:col[4]||'',t:col[7]||''});
 }
-if(dados.length>0){
-DADOS=dados;
-localStorage.setItem('infinity_cache',JSON.stringify(dados));
-st.innerHTML='✅ Ao vivo ('+dados.length+' respostas)';
-aplicar();
-}
+if(dados.length>0){DADOS=dados;st.innerHTML='✅ Ao vivo ('+dados.length+' respostas)';st.className='badge badge-green';aplicar()}
+else throw'Vazio';
 }).catch(function(){
-st.innerHTML='📦 Dados offline (cache)';
-if(DADOS.length==0){st.innerHTML='⚠️ Sem dados. Recarregue.'}
+st.innerHTML='⚠️ Erro ao conectar na planilha';st.className='badge badge-red';
 });
 }
 
-var filtro="tudo",dadosFiltrados=[],hoje=new Date(2026,6,28);
-
-function parseD(s){
-if(!s||s.length<8)return hoje;
-var p=s.split('/');
-return new Date(p[2],p[1]-1,p[0]);
-}
-
-function filtrar(t,b){
-filtro=t;
-document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});
-b.classList.add('active');
-aplicar();
-}
-
-function filtrarPeriodo(){
-filtro='custom';
-document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});
-aplicar();
-}
-
+function filtrar(t,b){filtro=t;document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});b.classList.add('active');aplicar()}
+function filtrarPeriodo(){filtro='custom';aplicar()}
 function aplicar(){
 var arr=[];
 for(var i=0;i<DADOS.length;i++)arr.push(DADOS[i]);
-var analista=document.getElementById('filtroAnalista').value;
-if(analista!=='todos'){arr=arr.filter(function(x){return x.e===analista})}
+var ana=document.getElementById('filtroAnalista').value;
+if(ana!=='todos')arr=arr.filter(function(x){return x.e===ana});
 var di=document.getElementById('dataInicio').value,df=document.getElementById('dataFim').value;
 if(filtro==='dia'){var c=new Date(hoje);arr=arr.filter(function(x){return parseD(x.d).toDateString()===c.toDateString()})}
 else if(filtro==='semana'){var c=new Date(hoje);c.setDate(c.getDate()-7);arr=arr.filter(function(x){return parseD(x.d)>=c})}
@@ -218,44 +168,35 @@ esp(d);insights(d);com(d);
 }
 
 function desenhar(id,dat){
-var c=document.getElementById(id),ctx=c.getContext('2d'),w=c.width=c.offsetWidth,h=c.height=250;ctx.clearRect(0,0,w,h);
-var mx=0;for(var i=0;i<dat.length;i++)if(dat[i].v>mx)mx=dat[i].v;
-if(mx===0)return;
+var c=document.getElementById(id);if(!c)return;
+var ctx=c.getContext('2d'),w=c.width=c.offsetWidth||400,h=c.height=220;ctx.clearRect(0,0,w,h);
+var mx=0;for(var i=0;i<dat.length;i++)if(dat[i].v>mx)mx=dat[i].v;if(mx===0)return;
 var bw=(w/dat.length)*0.6,sp=(w/dat.length)*0.4;
-for(var i=0;i<dat.length;i++){var d=dat[i],bh=(d.v/mx)*(h-60),x=i*(bw+sp)+sp/2,y=h-bh-30;ctx.fillStyle=d.c;ctx.fillRect(x,y,bw,bh);ctx.fillStyle='#1F2937';ctx.font='bold 12px sans-serif';ctx.textAlign='center';ctx.fillText(d.v,x+bw/2,y-10);ctx.fillText(d.l,x+bw/2,h-10)}
+for(var i=0;i<dat.length;i++){var d=dat[i],bh=Math.max(4,(d.v/mx)*(h-60)),x=i*(bw+sp)+sp/2,y=h-bh-30;ctx.fillStyle=d.c;ctx.fillRect(x,y,bw,bh);ctx.fillStyle='#1F2937';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText(d.v,x+bw/2,y-8);ctx.fillText(d.l,x+bw/2,h-10)}
 }
 
 function esp(d){
-var m={};
-for(var i=0;i<d.length;i++){var e=d[i].e||'Não informado';if(!m[e])m[e]={q:0,n:0,c:0};m[e].q++;m[e].n+=d[i].n;m[e].c+=d[i].c}
+var m={};for(var i=0;i<d.length;i++){var e=d[i].e||'Nao informado';if(!m[e])m[e]={q:0,n:0,c:0};m[e].q++;m[e].n+=d[i].n;m[e].c+=d[i].c}
 var ord=Object.keys(m).sort(function(a,b){return m[b].n/m[b].q-m[a].n/m[a].q});
-var html='';
-for(var i=0;i<ord.length;i++){var o=m[ord[i]];html+='<tr><td><strong>'+ord[i]+'</strong></td><td>'+o.q+'</td><td>'+(o.n/o.q).toFixed(1)+'</td><td>'+(o.c/o.q).toFixed(1)+'</td></tr>'}
+var html='';for(var i=0;i<ord.length;i++){var o=m[ord[i]];html+='<tr><td><strong>'+ord[i]+'</strong></td><td>'+o.q+'</td><td>'+(o.n/o.q).toFixed(1)+'</td><td>'+(o.c/o.q).toFixed(1)+'</td></tr>'}
 document.getElementById('tabEsp').innerHTML=html;
 }
 
 function insights(d){
-document.getElementById('insightsNps').innerHTML='<p><strong>✅ Forças:</strong> Atendimento personalizado, qualidade das joias, variedade, preço.</p><p><strong>⚠️ Riscos:</strong> Prazo de entrega e erros em pedidos são os principais detratores.</p>';
-document.getElementById('insightsCsat').innerHTML='<p><strong>✅ Forças:</strong> Atendimento nota 5, suporte pós-venda, resolução de problemas.</p><p><strong>⚠️ Riscos:</strong> Notas ≤3 têm relação direta com erro no pedido enviado.</p>';
-document.getElementById('nuvem').innerHTML='<span class="tag tag-pos">Atendimento</span><span class="tag tag-pos">Qualidade</span><span class="tag tag-pos">Preço</span><span class="tag tag-pos">Variedade</span><span class="tag tag-pos">Rapidez</span><span class="tag tag-pos">Cordialidade</span><span class="tag tag-pos">Resolução</span><span class="tag tag-neg">Demora</span><span class="tag tag-neg">Entrega</span><span class="tag tag-neg">Estoque</span><span class="tag tag-neg">Erro</span><span class="tag tag-neg">Postagem</span><span class="tag tag-neg">Separação</span>';
+document.getElementById('insightsNps').innerHTML='<p><strong>✅ Forcas:</strong> Atendimento, qualidade das joias, variedade e precos justos.</p><p><strong>⚠️ Riscos:</strong> Prazo de entrega e erros em pedidos sao os principais detratores.</p>';
+document.getElementById('insightsCsat').innerHTML='<p><strong>✅ Forcas:</strong> Atendimento nota 5, suporte pos-venda, resolucao de problemas.</p><p><strong>⚠️ Riscos:</strong> Notas baixas tem relacao direta com erro no pedido enviado.</p>';
+document.getElementById('nuvem').innerHTML='<span class="tag tag-pos">Atendimento</span><span class="tag tag-pos">Qualidade</span><span class="tag tag-pos">Preco</span><span class="tag tag-pos">Variedade</span><span class="tag tag-pos">Rapidez</span><span class="tag tag-neg">Demora</span><span class="tag tag-neg">Entrega</span><span class="tag tag-neg">Estoque</span><span class="tag tag-neg">Erro</span><span class="tag tag-neg">Postagem</span>';
 }
 
 function com(d){
-var html='';
-var max=Math.min(30,d.length);
-for(var i=0;i<max;i++){
-var x=d[i],t='row-neutro';if(x.n>=9)t='row-promotor';if(x.n<=6)t='row-detrator';
-html+='<tr class="'+t+'"><td>'+x.d+'</td><td>'+x.p+'</td><td>'+(x.e||'-")+'</td><td><strong>'+x.n+'</strong></td><td>'+x.c+'</td><td><strong>'+x.m+'</strong><br><em>'+(x.t||'')+'</em></td></tr>'
-}
+var html='',max=Math.min(40,d.length);
+for(var i=0;i<max;i++){var x=d[i],t='row-neutro';if(x.n>=9)t='row-promotor';if(x.n<=6)t='row-detrator';html+='<tr class="'+t+'"><td>'+x.d+'</td><td>'+x.p+'</td><td>'+(x.e||'-')+'</td><td><strong>'+x.n+'</strong></td><td>'+x.c+'</td><td><strong>'+x.m+'</strong><br><em>'+(x.t||'')+'</em></td></tr>'}
 document.getElementById('tabCom').innerHTML=html;
 }
 
-function exportar(){
-var n=document.getElementById('nps').innerText,t=document.getElementById('total').innerText;
-navigator.clipboard.writeText('INFINITY PIERCING - Relatorio '+new Date().toLocaleDateString()+'\nNPS: '+n+'\nRespostas: '+t).then(function(){alert('Copiado!')});
-}
+function exportar(){var n=document.getElementById('nps').innerText,t=document.getElementById('total').innerText;navigator.clipboard.writeText('INFINITY PIERCING\nNPS: '+n+'\nRespostas: '+t).then(function(){alert('Copiado!')})}
 
-window.onload=carregarDados;
+window.onload=carregar;
 </script>
 </body>
 </html>
