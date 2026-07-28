@@ -87,12 +87,17 @@ td{padding:.6rem;border-bottom:1px solid #F3F4F6}
 </div>
 </div>
 <script>
-var SCRIPT_URL='https://script.google.com/macros/s/AKfycbzdF4Z7JDMedeT2nlNsHO0Aj1N4FuqE4QatL7itU9KeHNXECBRbWh_4EeKdctfxgnnQhQ/exec';
+var SCRIPT_URL='https://script.google.com/macros/s/AKfycbylxWs9mwYGxS32_BmCTay-6WVEXA8tRlhPXJXTHKvZoE3PHAds6yyNLfI-TTKcpFlbow/exec';
 var CACHE_KEY='infinity_data';
 var DADOS=[],dadosFiltrados=[],filtro='tudo';
 var hoje=new Date(2026,6,28);
 
-function parseD(s){if(!s||s.length<6)return hoje;var p=s.split(' ')[0].split('/');return new Date(p[2],p[1]-1,p[0])}
+function parseD(s){
+if(!s||s.length<6)return hoje;
+var p=s.split(' ')[0].split('/');
+return new Date(Number(p[2]),Number(p[1])-1,Number(p[0]));
+}
+
 function st(msg,cor){var e=document.getElementById('status');e.textContent=msg;e.className='badge bg-'+cor}
 
 function carregar(){
@@ -118,18 +123,37 @@ setTimeout(carregar,3000);
 });
 }
 
-function filtrar(t,b){filtro=t;document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});b.classList.add('active');aplicar()}
+function filtrar(t,b){
+filtro=t;
+document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});
+b.classList.add('active');
+aplicar();
+}
+
 function filtrarPeriodo(){filtro='custom';aplicar()}
+
 function aplicar(){
-var arr=[];for(var i=0;i<DADOS.length;i++)arr.push(DADOS[i]);
+var arr=[];
+for(var i=0;i<DADOS.length;i++)arr.push(DADOS[i]);
 var ana=document.getElementById('fAnalista').value;
 if(ana!=='todos')arr=arr.filter(function(x){return x.e===ana});
 var di=document.getElementById('dInicio').value,df=document.getElementById('dFim').value;
-if(filtro==='dia'){var c=new Date(hoje);arr=arr.filter(function(x){return parseD(x.d).toDateString()===c.toDateString()})}
-else if(filtro==='semana'){var c=new Date(hoje);c.setDate(c.getDate()-7);arr=arr.filter(function(x){return parseD(x.d)>=c})}
-else if(filtro==='mes'){var c=new Date(hoje);c.setDate(c.getDate()-30);arr=arr.filter(function(x){return parseD(x.d)>=c})}
-else if(filtro==='custom'){if(di){var c=new Date(di);arr=arr.filter(function(x){return parseD(x.d)>=c})}if(df){var c2=new Date(df);c2.setDate(c2.getDate()+1);arr=arr.filter(function(x){return parseD(x.d)<=c2})}}
-dadosFiltrados=arr;render()}
+
+if(filtro==='dia'){
+var c=new Date(hoje);
+arr=arr.filter(function(x){return parseD(x.d).toDateString()===c.toDateString()});
+}else if(filtro==='semana'){
+var c=new Date(hoje);c.setDate(c.getDate()-7);
+arr=arr.filter(function(x){return parseD(x.d)>=c});
+}else if(filtro==='mes'){
+var c=new Date(hoje);c.setDate(c.getDate()-30);
+arr=arr.filter(function(x){return parseD(x.d)>=c});
+}else if(filtro==='custom'){
+if(di){var c=new Date(di+'T00:00:00');arr=arr.filter(function(x){return parseD(x.d)>=c})}
+if(df){var c2=new Date(df+'T23:59:59');arr=arr.filter(function(x){return parseD(x.d)<=c2})}
+}
+dadosFiltrados=arr;render();
+}
 
 function render(){
 var d=dadosFiltrados,t=d.length;
@@ -137,35 +161,43 @@ if(t===0){document.getElementById('nps').innerText='--';document.getElementById(
 var pro=0,det=0,sN=0,c4=0;
 for(var i=0;i<t;i++){var x=d[i];if(x.n>=9)pro++;else if(x.n<=6)det++;sN+=x.n;if(x.c>=4)c4++}
 var nps=((pro-det)/t)*100;
-document.getElementById('nps').innerText=nps.toFixed(1)+'%';document.getElementById('nps').style.color=nps>70?'#10B981':(nps>50?'#F59E0B':'#EF4444');
-document.getElementById('csat').innerText=(c4/t*100).toFixed(1)+'%';document.getElementById('media').innerText=(sN/t).toFixed(1);document.getElementById('total').innerText=t;
+document.getElementById('nps').innerText=nps.toFixed(1)+'%';
+document.getElementById('nps').style.color=nps>70?'#10B981':(nps>50?'#F59E0B':'#EF4444');
+document.getElementById('csat').innerText=(c4/t*100).toFixed(1)+'%';
+document.getElementById('media').innerText=(sN/t).toFixed(1);
+document.getElementById('total').innerText=t;
 graf('gNps',[{l:'Promotores',v:pro,c:'#10B981'},{l:'Neutros',v:t-pro-det,c:'#F59E0B'},{l:'Detratores',v:det,c:'#EF4444'}]);
 var cs=[0,0,0,0,0];for(var i=0;i<t;i++){var ci=d[i].c;if(ci>=1&&ci<=5)cs[ci-1]++}
 graf('gCsat',cs.map(function(v,i){return{l:(i+1)+'★',v:v,c:i+1>=4?'#10B981':'#D1D5DB'}}));
-esp(d);insights();com(d)}
+esp(d);insights();com(d);
+}
 
 function graf(id,dat){
 var c=document.getElementById(id);if(!c)return;
 var ctx=c.getContext('2d'),w=c.width=c.offsetWidth||300,h=c.height=200;ctx.clearRect(0,0,w,h);
 var mx=0;for(var i=0;i<dat.length;i++)if(dat[i].v>mx)mx=dat[i].v;if(mx===0)return;
 var bw=Math.min(60,(w/dat.length)*0.6),sp=(w-dat.length*bw)/(dat.length+1);
-for(var i=0;i<dat.length;i++){var d=dat[i],bh=Math.max(3,(d.v/mx)*(h-50)),x=sp+i*(bw+sp),y=h-bh-25;ctx.fillStyle=d.c;ctx.fillRect(x,y,bw,bh);ctx.fillStyle='#1F2937';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText(d.v,x+bw/2,y-6);ctx.fillText(d.l,x+bw/2,h-8)}}
+for(var i=0;i<dat.length;i++){var d=dat[i],bh=Math.max(3,(d.v/mx)*(h-50)),x=sp+i*(bw+sp),y=h-bh-25;ctx.fillStyle=d.c;ctx.fillRect(x,y,bw,bh);ctx.fillStyle='#1F2937';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText(d.v,x+bw/2,y-6);ctx.fillText(d.l,x+bw/2,h-8);}
+}
 
 function esp(d){
 var m={};for(var i=0;i<d.length;i++){var e=d[i].e||'Nao informado';if(!m[e])m[e]={q:0,n:0,c:0};m[e].q++;m[e].n+=d[i].n;m[e].c+=d[i].c}
 var ord=Object.keys(m).sort(function(a,b){return m[b].n/m[b].q-m[a].n/m[a].q});
 var html='';for(var i=0;i<ord.length;i++){var o=m[ord[i]];html+='<tr><td><strong>'+ord[i]+'</strong></td><td>'+o.q+'</td><td>'+(o.n/o.q).toFixed(1)+'</td><td>'+(o.c/o.q).toFixed(1)+'</td></tr>'}
-document.getElementById('tEsp').innerHTML=html;}
+document.getElementById('tEsp').innerHTML=html;
+}
 
 function insights(){
 document.getElementById('iNps').innerHTML='<strong>✅ Forcas:</strong> Atendimento, qualidade, variedade, preco.<br><strong>⚠️ Riscos:</strong> Prazo de entrega e erros em pedidos.';
 document.getElementById('iCsat').innerHTML='<strong>✅ Forcas:</strong> Atendimento nota 5, suporte, resolucao.<br><strong>⚠️ Riscos:</strong> Notas baixas = erro no pedido.';
-document.getElementById('nuvem').innerHTML='<span class="tag tag-pos">Atendimento</span><span class="tag tag-pos">Qualidade</span><span class="tag tag-pos">Preco</span><span class="tag tag-pos">Variedade</span><span class="tag tag-pos">Rapidez</span><span class="tag tag-neg">Demora</span><span class="tag tag-neg">Entrega</span><span class="tag tag-neg">Estoque</span><span class="tag tag-neg">Erro</span><span class="tag tag-neg">Postagem</span>';}
+document.getElementById('nuvem').innerHTML='<span class="tag tag-pos">Atendimento</span><span class="tag tag-pos">Qualidade</span><span class="tag tag-pos">Preco</span><span class="tag tag-pos">Variedade</span><span class="tag tag-pos">Rapidez</span><span class="tag tag-neg">Demora</span><span class="tag tag-neg">Entrega</span><span class="tag tag-neg">Estoque</span><span class="tag tag-neg">Erro</span><span class="tag tag-neg">Postagem</span>';
+}
 
 function com(d){
 var html='',max=Math.min(40,d.length);
 for(var i=0;i<max;i++){var x=d[i],t='row-neutro';if(x.n>=9)t='row-promotor';if(x.n<=6)t='row-detrator';html+='<tr class="'+t+'"><td>'+x.d+'</td><td>'+x.p+'</td><td>'+(x.e||'-')+'</td><td><strong>'+x.n+'</strong></td><td>'+x.c+'</td><td><strong>'+x.m+'</strong><br><em>'+(x.t||'')+'</em></td></tr>'}
-document.getElementById('tCom').innerHTML=html;}
+document.getElementById('tCom').innerHTML=html;
+}
 
 function exportar(){var n=document.getElementById('nps').innerText,t=document.getElementById('total').innerText;navigator.clipboard.writeText('INFINITY PIERCING\nNPS: '+n+'\nRespostas: '+t).then(function(){alert('Copiado!')})}
 
