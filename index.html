@@ -9,49 +9,41 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
 body{background:var(--bg);color:var(--text);padding-bottom:40px}
 header{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;padding:2rem;text-align:center;position:relative}
-.badge{position:absolute;top:1rem;right:1rem;padding:.5rem 1rem;border-radius:20px;font-size:.75rem;font-weight:700}
-.badge-green{background:rgba(16,185,129,.3)}
-.badge-yellow{background:rgba(245,158,11,.3)}
-.badge-red{background:rgba(239,68,68,.3)}
+.badge{position:absolute;top:.75rem;right:.75rem;padding:.4rem .8rem;border-radius:20px;font-size:.7rem;font-weight:700}
+.bg-green{background:rgba(16,185,129,.25)}.bg-yellow{background:rgba(245,158,11,.25)}.bg-red{background:rgba(239,68,68,.25)}
 .container{max-width:1200px;margin:0 auto;padding:0 1rem}
-.controls{background:var(--card);margin-top:-1.5rem;padding:1rem;border-radius:12px;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;box-shadow:0 10px 15px -3px rgba(0,0,0,.1)}
-.tabs{display:flex;gap:.5rem;background:#E5E7EB;padding:.25rem;border-radius:8px}
-.tab-btn{padding:.5rem 1rem;border:none;background:0 0;cursor:pointer;border-radius:6px;font-weight:600;color:var(--text-light)}
+.controls{background:var(--card);margin-top:-1.5rem;padding:.8rem;border-radius:12px;display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;box-shadow:0 10px 15px -3px rgba(0,0,0,.1)}
+.tabs{display:flex;gap:.3rem;background:#E5E7EB;padding:.25rem;border-radius:8px}
+.tab-btn{padding:.4rem .8rem;border:none;background:0 0;cursor:pointer;border-radius:6px;font-weight:600;font-size:.8rem;color:var(--text-light)}
 .tab-btn.active{background:var(--card);color:var(--primary);box-shadow:0 2px 4px rgba(0,0,0,.1)}
-select{padding:.5rem;border-radius:6px;border:1px solid #DDD;font-weight:600;background:white}
-.btn{padding:.6rem 1.2rem;border-radius:8px;border:none;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:.5rem}
+select{padding:.35rem;border-radius:6px;border:1px solid #DDD;font-weight:600;font-size:.8rem;background:white}
+.btn{padding:.4rem .8rem;border-radius:6px;border:none;cursor:pointer;font-weight:600;font-size:.8rem;display:flex;align-items:center;gap:.4rem}
 .btn-primary{background:var(--primary);color:#fff}
 .btn-secondary{background:#E5E7EB;color:var(--text)}
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1.5rem}
-.card{background:var(--card);padding:1.5rem;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-top:1.5rem}
+.card{background:var(--card);padding:1.2rem;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
 .kpi-card{text-align:center}
-.kpi-label{font-size:.75rem;color:var(--text-light);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem}
-.kpi-value{font-size:2.5rem;font-weight:800}
-.charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:1.5rem;margin-top:1.5rem}
-canvas{width:100%!important;height:220px!important}
-.section-title{margin:2rem 0 1rem;font-size:1.25rem;font-weight:700;color:var(--primary)}
-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden}
-th{background:#F9FAFB;padding:.75rem;text-align:left;font-size:.7rem;text-transform:uppercase;color:var(--text-light);border-bottom:1px solid #E5E7EB}
-td{padding:.75rem;border-bottom:1px solid #F3F4F6;font-size:.8rem}
-.row-promotor{background:#ECFDF5}
-.row-neutro{background:#FFFBEB}
-.row-detrator{background:#FEF2F2}
-.tag-cloud{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
-.tag{padding:.25rem .75rem;border-radius:20px;font-size:.75rem;font-weight:600}
-.tag-pos{background:#D1FAE5;color:#065F46}
-.tag-neg{background:#FEE2E2;color:#991B1B}
+.kpi-label{font-size:.7rem;color:var(--text-light);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem}
+.kpi-value{font-size:2rem;font-weight:800}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1.5rem}
+canvas{width:100%!important;height:200px!important}
+.section-title{margin:1.5rem 0 .8rem;font-size:1.1rem;font-weight:700;color:var(--primary)}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden;font-size:.8rem}
+th{background:#F9FAFB;padding:.6rem;text-align:left;font-size:.65rem;text-transform:uppercase;color:var(--text-light);border-bottom:1px solid #E5E7EB}
+td{padding:.6rem;border-bottom:1px solid #F3F4F6}
+.row-promotor{background:#ECFDF5}.row-neutro{background:#FFFBEB}.row-detrator{background:#FEF2F2}
 .insights-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-.insight-card{padding:1rem;border-radius:8px;background:#F9FAFB}
-.insight-card h4{font-size:.85rem;margin-bottom:.5rem}
-.insight-card p{font-size:.75rem;color:var(--text-light)}
-.insight-nps{border-left:4px solid var(--primary)}
-.insight-csat{border-left:4px solid #F59E0B}
+.insight-card{padding:.8rem;border-radius:8px;background:#F9FAFB;border-left:3px solid var(--primary)}
+.insight-card h4{font-size:.85rem;margin-bottom:.3rem}.insight-card p{font-size:.75rem;color:var(--text-light)}
+.tag-cloud{display:flex;flex-wrap:wrap;gap:.4rem}
+.tag{padding:.2rem .6rem;border-radius:20px;font-size:.7rem;font-weight:600}
+.tag-pos{background:#D1FAE5;color:#065F46}.tag-neg{background:#FEE2E2;color:#991B1B}
 @media(max-width:768px){.charts-grid,.insights-grid{grid-template-columns:1fr}.controls{flex-direction:column;align-items:stretch}}
 </style>
 </head>
 <body>
 <header>
-<div class="badge badge-yellow" id="statusTopo">⏳ Carregando...</div>
+<div class="badge bg-yellow" id="status">⏳ Carregando...</div>
 <h1>INFINITY PIERCING</h1>
 <p>Satisfação que transcende — Dashboard de Inteligência CX</p>
 </header>
@@ -63,20 +55,13 @@ td{padding:.75rem;border-bottom:1px solid #F3F4F6;font-size:.8rem}
 <button class="tab-btn" onclick="filtrar('mes',this)">Mensal</button>
 <button class="tab-btn active" onclick="filtrar('tudo',this)">Tudo</button>
 </div>
-<div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
-<span style="font-size:.75rem;font-weight:600">De:</span><input type="date" id="dataInicio" style="padding:.35rem;border-radius:6px;border:1px solid #DDD">
-<span style="font-size:.75rem;font-weight:600">Até:</span><input type="date" id="dataFim" style="padding:.35rem;border-radius:6px;border:1px solid #DDD">
-<button class="btn btn-primary" onclick="filtrarPeriodo()" style="padding:.35rem .8rem;font-size:.8rem">Filtrar</button>
-</div>
-<div style="display:flex;gap:.5rem;align-items:center">
-<label style="font-size:.75rem;font-weight:600">Analista:</label>
-<select id="filtroAnalista" onchange="aplicar()" style="padding:.35rem">
-<option value="todos">Todos</option>
-<option value="Larissa">Larissa</option>
-<option value="Vinicius">Vinicius</option>
-<option value="Andrei">Andrei</option>
-</select>
-<button class="btn btn-secondary" onclick="exportar()" style="padding:.35rem .8rem;font-size:.8rem">📥 Exportar</button>
+<div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap">
+<span style="font-size:.7rem;font-weight:600">De:</span><input type="date" id="dInicio" style="padding:.3rem;border-radius:6px;border:1px solid #DDD">
+<span style="font-size:.7rem;font-weight:600">Até:</span><input type="date" id="dFim" style="padding:.3rem;border-radius:6px;border:1px solid #DDD">
+<button class="btn btn-primary" onclick="filtrarPeriodo()">Filtrar</button>
+<label style="font-size:.7rem;font-weight:600">Analista:</label>
+<select id="fAnalista" onchange="aplicar()"><option value="todos">Todos</option><option value="Larissa">Larissa</option><option value="Vinicius">Vinicius</option><option value="Andrei">Andrei</option></select>
+<button class="btn btn-secondary" onclick="exportar()">📥 Exportar</button>
 </div>
 </div>
 <div class="kpi-grid">
@@ -86,24 +71,27 @@ td{padding:.75rem;border-bottom:1px solid #F3F4F6;font-size:.8rem}
 <div class="card kpi-card"><div class="kpi-label">Respostas</div><div class="kpi-value" id="total">--</div></div>
 </div>
 <div class="charts-grid">
-<div class="card"><h3 style="margin-bottom:.5rem;font-size:.9rem">Distribuição NPS</h3><canvas id="grafNps"></canvas></div>
-<div class="card"><h3 style="margin-bottom:.5rem;font-size:.9rem">Distribuição CSAT</h3><canvas id="grafCsat"></canvas></div>
+<div class="card"><h3 style="margin-bottom:.5rem;font-size:.85rem">Distribuição NPS</h3><canvas id="gNps"></canvas></div>
+<div class="card"><h3 style="margin-bottom:.5rem;font-size:.85rem">Distribuição CSAT</h3><canvas id="gCsat"></canvas></div>
 </div>
 <div class="charts-grid">
-<div class="card"><h3 style="margin-bottom:.5rem;font-size:.9rem">👥 Especialistas</h3><div style="overflow-x:auto"><table><thead><tr><th>Nome</th><th>Atend.</th><th>NPS Médio</th><th>CSAT Médio</th></tr></thead><tbody id="tabEsp"></tbody></table></div></div>
-<div class="card"><h3 style="margin-bottom:.5rem;font-size:.9rem">🔍 Nuvem de Palavras</h3><div class="tag-cloud" id="nuvem"></div></div>
+<div class="card"><h3 style="margin-bottom:.5rem;font-size:.85rem">👥 Especialistas</h3><div><table><thead><tr><th>Nome</th><th>Atend.</th><th>NPS</th><th>CSAT</th></tr></thead><tbody id="tEsp"></tbody></table></div></div>
+<div class="card"><h3 style="margin-bottom:.5rem;font-size:.85rem">🔍 Palavras</h3><div class="tag-cloud" id="nuvem"></div></div>
 </div>
 <div class="insights-grid">
-<div class="insight-card insight-nps"><h4>🟣 NPS</h4><div id="insightsNps"><p style="font-size:.8rem">Carregando...</p></div></div>
-<div class="insight-card insight-csat"><h4>🟡 CSAT</h4><div id="insightsCsat"><p style="font-size:.8rem">Carregando...</p></div></div>
+<div class="insight-card"><h4>🟣 NPS</h4><p id="iNps">Carregando...</p></div>
+<div class="insight-card" style="border-left-color:#F59E0B"><h4>🟡 CSAT</h4><p id="iCsat">Carregando...</p></div>
 </div>
 <div class="section-title">💬 Comentários</div>
 <div style="overflow-x:auto">
-<table><thead><tr><th>Data</th><th>Perfil</th><th>Analista</th><th>NPS</th><th>CSAT</th><th>Motivo / Comentário</th></tr></thead><tbody id="tabCom"></tbody></table>
+<table><thead><tr><th>Data</th><th>Perfil</th><th>Analista</th><th>NPS</th><th>CSAT</th><th>Motivo / Comentário</th></tr></thead><tbody id="tCom"></tbody></table>
 </div>
 </div>
 <script>
+var SPREADSHEET_ID='1v7a2HvllaIVnYI88dlNLszm2rw62Bb5J2twwjI8irro';
+var API_KEY='AIzaSyD_d-eK0wome9pc_cul_ziEyn_INNweqSA';
 var CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vRHcKSrSXFBcF8A4fQIR3xxg-7G_PlzA6udtxxfKVpDAP_p1Op1ZHbX8ND8jTgPfgU6Le7MjaYTXRby/pub?output=csv';
+var CACHE_KEY='infinity_data';
 var DADOS=[],dadosFiltrados=[],filtro='tudo';
 var hoje=new Date(2026,6,28);
 
@@ -113,45 +101,71 @@ for(var i=0;i<t.length;i++){
 var c=t[i];
 if(aspas){if(c=='"'){if(i+1<t.length&&t[i+1]=='"'){campo+='"';i++}else aspas=false}else campo+=c}
 else{if(c=='"')aspas=true;else if(c==','){cur.push(campo);campo=''}else if(c=='\n'){cur.push(campo);campo='';if(cur.length>3)linhas.push(cur);cur=[]}else if(c=='\r'){}else campo+=c}
-}
-}if(cur.length>3)linhas.push(cur);return linhas}
+}}if(cur.length>3)linhas.push(cur);return linhas}
 
-function parseD(s){if(!s||s.length<8)return hoje;var p=s.split(' ')[0].split('/');return new Date(p[2],p[1]-1,p[0])}
+function parseD(s){if(!s||s.length<6)return hoje;var p=s.split(' ')[0].split('/');return new Date(p[2],p[1]-1,p[0])}
+
+function st(msg,cor){var e=document.getElementById('status');e.textContent=msg;e.className='badge bg-'+cor}
 
 function carregar(){
-var st=document.getElementById('statusTopo');
-// Tenta fetch
+st('⏳ Carregando...','yellow');
+// Tenta cache primeiro
+try{var c=localStorage.getItem(CACHE_KEY);if(c){DADOS=JSON.parse(c);st('📦 Cache ('+DADOS.length+')','yellow');aplicar()}}catch(e){}
+// Estratégia 1: Google Sheets API (suporta CORS se habilitada)
+var apiUrl='https://sheets.googleapis.com/v4/spreadsheets/'+SPREADSHEET_ID+'/values/%27Respostas%20ao%20formul%C3%A1rio%201%27!A2:H200?key='+API_KEY;
+fetch(apiUrl).then(function(r){return r.json()}).then(function(d){
+if(d.values&&d.values.length>0){
+processar(d.values);
+st('✅ API Google ('+DADOS.length+')','green');
+return;
+}
+throw 'sem dados';
+}).catch(function(){
+// Estratégia 2: CORS Proxy + CSV
+st('⏳ Proxy...','yellow');
+fetch('https://corsproxy.io/?'+encodeURIComponent(CSV_URL)).then(function(r){return r.text()}).then(function(txt){
+var linhas=parseCSV(txt);
+if(linhas.length>1){
+processar(linhas);
+st('✅ Proxy ('+DADOS.length+')','green');
+}else throw 'vazio';
+}).catch(function(){
+// Estratégia 3: tentar CSV direto
 fetch(CSV_URL).then(function(r){return r.text()}).then(function(txt){
 var linhas=parseCSV(txt);
-if(linhas.length<2)throw'Poucas linhas';
+if(linhas.length>1){processar(linhas);st('✅ Direto ('+DADOS.length+')','green')}
+else throw 'vazio';
+}).catch(function(){
+if(DADOS.length===0){st('⚠️ Sem dados','red')}
+else st('📦 Cache ('+DADOS.length+')','yellow');
+});
+});
+});
+}
+
+function processar(linhas){
 var dados=[];
 for(var i=1;i<linhas.length;i++){
-var col=linhas[i];if(col.length<4)continue;
+var col=linhas[i];if(!col||col.length<4)continue;
 var nps=parseInt(col[3]);if(isNaN(nps)||nps<0||nps>10)continue;
 var csat=parseInt(col[6]);if(isNaN(csat)||csat<1||csat>5)csat=5;
 dados.push({d:(col[0]||'').split(' ')[0],n:nps,c:csat,p:col[2]||'',e:col[5]||'',m:col[4]||'',t:col[7]||''});
 }
-if(dados.length>0){DADOS=dados;st.innerHTML='✅ Ao vivo ('+dados.length+' respostas)';st.className='badge badge-green';aplicar()}
-else throw'Vazio';
-}).catch(function(){
-st.innerHTML='⚠️ Erro ao conectar na planilha';st.className='badge badge-red';
-});
+if(dados.length>0){DADOS=dados;try{localStorage.setItem(CACHE_KEY,JSON.stringify(dados))}catch(e){}aplicar()}
 }
 
 function filtrar(t,b){filtro=t;document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});b.classList.add('active');aplicar()}
 function filtrarPeriodo(){filtro='custom';aplicar()}
 function aplicar(){
-var arr=[];
-for(var i=0;i<DADOS.length;i++)arr.push(DADOS[i]);
-var ana=document.getElementById('filtroAnalista').value;
+var arr=[];for(var i=0;i<DADOS.length;i++)arr.push(DADOS[i]);
+var ana=document.getElementById('fAnalista').value;
 if(ana!=='todos')arr=arr.filter(function(x){return x.e===ana});
-var di=document.getElementById('dataInicio').value,df=document.getElementById('dataFim').value;
+var di=document.getElementById('dInicio').value,df=document.getElementById('dFim').value;
 if(filtro==='dia'){var c=new Date(hoje);arr=arr.filter(function(x){return parseD(x.d).toDateString()===c.toDateString()})}
 else if(filtro==='semana'){var c=new Date(hoje);c.setDate(c.getDate()-7);arr=arr.filter(function(x){return parseD(x.d)>=c})}
 else if(filtro==='mes'){var c=new Date(hoje);c.setDate(c.getDate()-30);arr=arr.filter(function(x){return parseD(x.d)>=c})}
 else if(filtro==='custom'){if(di){var c=new Date(di);arr=arr.filter(function(x){return parseD(x.d)>=c})}if(df){var c2=new Date(df);c2.setDate(c2.getDate()+1);arr=arr.filter(function(x){return parseD(x.d)<=c2})}}
-dadosFiltrados=arr;render();
-}
+dadosFiltrados=arr;render()}
 
 function render(){
 var d=dadosFiltrados,t=d.length;
@@ -161,38 +175,33 @@ for(var i=0;i<t;i++){var x=d[i];if(x.n>=9)pro++;else if(x.n<=6)det++;sN+=x.n;if(
 var nps=((pro-det)/t)*100;
 document.getElementById('nps').innerText=nps.toFixed(1)+'%';document.getElementById('nps').style.color=nps>70?'#10B981':(nps>50?'#F59E0B':'#EF4444');
 document.getElementById('csat').innerText=(c4/t*100).toFixed(1)+'%';document.getElementById('media').innerText=(sN/t).toFixed(1);document.getElementById('total').innerText=t;
-desenhar('grafNps',[{l:'Promotores',v:pro,c:'#10B981'},{l:'Neutros',v:t-pro-det,c:'#F59E0B'},{l:'Detratores',v:det,c:'#EF4444'}]);
+graf('gNps',[{l:'Promotores',v:pro,c:'#10B981'},{l:'Neutros',v:t-pro-det,c:'#F59E0B'},{l:'Detratores',v:det,c:'#EF4444'}]);
 var cs=[0,0,0,0,0];for(var i=0;i<t;i++){var ci=d[i].c;if(ci>=1&&ci<=5)cs[ci-1]++}
-desenhar('grafCsat',cs.map(function(v,i){return{l:(i+1)+'★',v:v,c:i+1>=4?'#10B981':'#D1D5DB'}}));
-esp(d);insights(d);com(d);
-}
+graf('gCsat',cs.map(function(v,i){return{l:(i+1)+'★',v:v,c:i+1>=4?'#10B981':'#D1D5DB'}}));
+esp(d);insights();com(d)}
 
-function desenhar(id,dat){
+function graf(id,dat){
 var c=document.getElementById(id);if(!c)return;
-var ctx=c.getContext('2d'),w=c.width=c.offsetWidth||400,h=c.height=220;ctx.clearRect(0,0,w,h);
+var ctx=c.getContext('2d'),w=c.width=c.offsetWidth||300,h=c.height=200;ctx.clearRect(0,0,w,h);
 var mx=0;for(var i=0;i<dat.length;i++)if(dat[i].v>mx)mx=dat[i].v;if(mx===0)return;
-var bw=(w/dat.length)*0.6,sp=(w/dat.length)*0.4;
-for(var i=0;i<dat.length;i++){var d=dat[i],bh=Math.max(4,(d.v/mx)*(h-60)),x=i*(bw+sp)+sp/2,y=h-bh-30;ctx.fillStyle=d.c;ctx.fillRect(x,y,bw,bh);ctx.fillStyle='#1F2937';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText(d.v,x+bw/2,y-8);ctx.fillText(d.l,x+bw/2,h-10)}
-}
+var bw=Math.min(60,(w/dat.length)*0.6),sp=(w-dat.length*bw)/(dat.length+1);
+for(var i=0;i<dat.length;i++){var d=dat[i],bh=Math.max(3,(d.v/mx)*(h-50)),x=sp+i*(bw+sp),y=h-bh-25;ctx.fillStyle=d.c;ctx.fillRect(x,y,bw,bh);ctx.fillStyle='#1F2937';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText(d.v,x+bw/2,y-6);ctx.fillText(d.l,x+bw/2,h-8)}}
 
 function esp(d){
 var m={};for(var i=0;i<d.length;i++){var e=d[i].e||'Nao informado';if(!m[e])m[e]={q:0,n:0,c:0};m[e].q++;m[e].n+=d[i].n;m[e].c+=d[i].c}
 var ord=Object.keys(m).sort(function(a,b){return m[b].n/m[b].q-m[a].n/m[a].q});
 var html='';for(var i=0;i<ord.length;i++){var o=m[ord[i]];html+='<tr><td><strong>'+ord[i]+'</strong></td><td>'+o.q+'</td><td>'+(o.n/o.q).toFixed(1)+'</td><td>'+(o.c/o.q).toFixed(1)+'</td></tr>'}
-document.getElementById('tabEsp').innerHTML=html;
-}
+document.getElementById('tEsp').innerHTML=html;}
 
-function insights(d){
-document.getElementById('insightsNps').innerHTML='<p><strong>✅ Forcas:</strong> Atendimento, qualidade das joias, variedade e precos justos.</p><p><strong>⚠️ Riscos:</strong> Prazo de entrega e erros em pedidos sao os principais detratores.</p>';
-document.getElementById('insightsCsat').innerHTML='<p><strong>✅ Forcas:</strong> Atendimento nota 5, suporte pos-venda, resolucao de problemas.</p><p><strong>⚠️ Riscos:</strong> Notas baixas tem relacao direta com erro no pedido enviado.</p>';
-document.getElementById('nuvem').innerHTML='<span class="tag tag-pos">Atendimento</span><span class="tag tag-pos">Qualidade</span><span class="tag tag-pos">Preco</span><span class="tag tag-pos">Variedade</span><span class="tag tag-pos">Rapidez</span><span class="tag tag-neg">Demora</span><span class="tag tag-neg">Entrega</span><span class="tag tag-neg">Estoque</span><span class="tag tag-neg">Erro</span><span class="tag tag-neg">Postagem</span>';
-}
+function insights(){
+document.getElementById('iNps').innerHTML='<strong>✅ Forças:</strong> Atendimento, qualidade, variedade, preço.<br><strong>⚠️ Riscos:</strong> Prazo de entrega e erros em pedidos.';
+document.getElementById('iCsat').innerHTML='<strong>✅ Forças:</strong> Atendimento nota 5, suporte, resolução.<br><strong>⚠️ Riscos:</strong> Notas baixas = erro no pedido.';
+document.getElementById('nuvem').innerHTML='<span class="tag tag-pos">Atendimento</span><span class="tag tag-pos">Qualidade</span><span class="tag tag-pos">Preco</span><span class="tag tag-pos">Variedade</span><span class="tag tag-pos">Rapidez</span><span class="tag tag-neg">Demora</span><span class="tag tag-neg">Entrega</span><span class="tag tag-neg">Estoque</span><span class="tag tag-neg">Erro</span><span class="tag tag-neg">Postagem</span>';}
 
 function com(d){
 var html='',max=Math.min(40,d.length);
 for(var i=0;i<max;i++){var x=d[i],t='row-neutro';if(x.n>=9)t='row-promotor';if(x.n<=6)t='row-detrator';html+='<tr class="'+t+'"><td>'+x.d+'</td><td>'+x.p+'</td><td>'+(x.e||'-')+'</td><td><strong>'+x.n+'</strong></td><td>'+x.c+'</td><td><strong>'+x.m+'</strong><br><em>'+(x.t||'')+'</em></td></tr>'}
-document.getElementById('tabCom').innerHTML=html;
-}
+document.getElementById('tCom').innerHTML=html;}
 
 function exportar(){var n=document.getElementById('nps').innerText,t=document.getElementById('total').innerText;navigator.clipboard.writeText('INFINITY PIERCING\nNPS: '+n+'\nRespostas: '+t).then(function(){alert('Copiado!')})}
 
