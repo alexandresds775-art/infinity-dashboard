@@ -37,20 +37,18 @@ td{padding:1rem;border-bottom:1px solid #F3F4F6;font-size:.875rem}
 .tag{padding:.25rem .75rem;border-radius:20px;font-size:.75rem;font-weight:600}
 .tag-pos{background:#D1FAE5;color:#065F46}
 .tag-neg{background:#FEE2E2;color:#991B1B}
-.tag-primary{background:#EDE9FE;color:#5B21B6}
 .insights-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 .insight-card{padding:1rem;border-radius:8px;background:#F9FAFB}
 .insight-card h4{font-size:.9rem;margin-bottom:.5rem}
 .insight-card p{font-size:.8rem;color:var(--text-light)}
 .insight-nps{border-left:4px solid var(--primary)}
 .insight-csat{border-left:4px solid #F59E0B}
-.status-bar{display:flex;gap:1rem;font-size:.8rem;color:var(--text-light);flex-wrap:wrap}
 @media(max-width:768px){.charts-grid,.insights-grid{grid-template-columns:1fr}.controls{flex-direction:column;align-items:stretch}}
 </style>
 </head>
 <body>
 <header>
-<div class="badge">📦 76 respostas</div>
+<div class="badge" id="statusTopo">🔗 Conectando à planilha...</div>
 <h1>INFINITY PIERCING</h1>
 <p>Satisfação que transcende — Dashboard de Inteligência CX</p>
 </header>
@@ -94,18 +92,10 @@ td{padding:1rem;border-bottom:1px solid #F3F4F6;font-size:.875rem}
 <div class="section-title">🔍 Insights</div>
 <div class="card">
 <div class="insights-grid">
-<div class="insight-card insight-nps">
-<h4>🟣 NPS — O que impacta</h4>
-<div id="insightsNps"></div>
+<div class="insight-card insight-nps"><h4>🟣 NPS — O que impacta</h4><div id="insightsNps"></div></div>
+<div class="insight-card insight-csat"><h4>🟡 CSAT — O que impacta</h4><div id="insightsCsat"></div></div>
 </div>
-<div class="insight-card insight-csat">
-<h4>🟡 CSAT — O que impacta</h4>
-<div id="insightsCsat"></div>
-</div>
-</div>
-<div style="margin-top:1rem">
-<div class="tag-cloud" id="nuvem"></div>
-</div>
+<div style="margin-top:1rem"><div class="tag-cloud" id="nuvem"></div></div>
 </div>
 <div class="section-title">💬 Comentários</div>
 <div style="overflow-x:auto">
@@ -113,53 +103,159 @@ td{padding:1rem;border-bottom:1px solid #F3F4F6;font-size:.875rem}
 </div>
 </div>
 <script>
-var DADOS=[{d:"13/07/2026",n:6,c:4,p:"Profissional",e:"",m:"A desejar",t:"Erro de joias"},{d:"13/07/2026",n:10,c:5,p:"Profissional",e:"",m:"Qualidade",t:"Atendimento e qualidade"},{d:"13/07/2026",n:10,c:5,p:"Profissional",e:"",m:"Qualidade e atendimento",t:"Amo cupons"},{d:"14/07/2026",n:9,c:5,p:"Profissional",e:"Larissa",m:"Descontos",t:"Melhorar SAC"},{d:"14/07/2026",n:10,c:5,p:"Profissional",e:"Andrei",m:"Atendimento e variedade",t:"Tá tudo ótimo!"},{d:"14/07/2026",n:10,c:5,p:"Profissional",e:"Andrei",m:"Detalhes joias",t:""},{d:"14/07/2026",n:8,c:4,p:"Profissional",e:"Andrei",m:"Atendimento ágil",t:"."},{d:"14/07/2026",n:10,c:5,p:"Pessoa Física",e:"Vinicius",m:"Excelente atendimento",t:""},{d:"14/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Vini atencioso",t:"Amo variedade"},{d:"14/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Excelente e gentil",t:"Preciso surfaces"},{d:"15/07/2026",n:10,c:5,p:"Pessoa Física",e:"Vinicius",m:"Gentil e educado",t:"Troca no site"},{d:"15/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Preços excelentes",t:"Vini espetacular"},{d:"15/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Excelência",t:"Tudo perfeito"},{d:"15/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Variedade e preços",t:""},{d:"15/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Perfeito",t:""},{d:"16/07/2026",n:10,c:5,p:"Profissional",e:"Andrei",m:"Atendeu bem",t:"Qualidade excelente"},{d:"16/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Comprometimento",t:"Atenção pós-problema"},{d:"16/07/2026",n:1,c:2,p:"Profissional",e:"Larissa",m:"Demora e falta retorno",t:"Não entregue 4 dias"},{d:"16/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Materiais excelência",t:""},{d:"16/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Satisfeita piercing",t:"Variedades"},{d:"16/07/2026",n:10,c:5,p:"Pessoa Física",e:"Larissa",m:"Bem atendida WhatsApp",t:"Prestativos"},{d:"17/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Qualidade e confiança",t:"Tudo ótimo"},{d:"17/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Muitas opções",t:"Agilizar separação"},{d:"17/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Atendimento",t:"Rápido e atencioso"},{d:"17/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Atendimento",t:""},{d:"17/07/2026",n:10,c:5,p:"Pessoa Física",e:"Larissa",m:"Valor justo",t:""},{d:"17/07/2026",n:9,c:5,p:"Profissional",e:"Larissa",m:"Gostei quero testar",t:"Variedade tamanhos"},{d:"17/07/2026",n:10,c:5,p:"Pessoa Física",e:"Larissa",m:"Bem atendida",t:"Atenção e rapidez"},{d:"17/07/2026",n:10,c:5,p:"Pessoa Física",e:"Larissa",m:"Atendimento excelente",t:"Rápido e útil"},{d:"18/07/2026",n:8,c:5,p:"Profissional",e:"Andrei",m:"Demora promoção",t:"Mais agilidade"},{d:"20/07/2026",n:10,c:5,p:"Pessoa Física",e:"Larissa",m:"Preços ótimos",t:"Qualidade atendimento"},{d:"20/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Ótimo atendimento",t:""},{d:"20/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Suporte impecável",t:"Surpreendo"},{d:"20/07/2026",n:8,c:4,p:"Profissional",e:"Larissa",m:"Atendimento rápido",t:"Demora entrega"},{d:"20/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Adoro comprar",t:"Sempre ajuda"},{d:"20/07/2026",n:9,c:5,p:"Profissional",e:"Larissa",m:"Variedade",t:"Especificação itens"},{d:"20/07/2026",n:8,c:4,p:"Profissional",e:"Larissa",m:"Bem embaladas",t:"Faltaram argolinhas"},{d:"20/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Alta qualidade",t:"Educada e ágil"},{d:"20/07/2026",n:8,c:4,p:"Pessoa Física",e:"Larissa",m:"Produtos esgotados",t:""},{d:"20/07/2026",n:8,c:5,p:"Profissional",e:"Larissa",m:"Falta tamanhos",t:"Vocês são ótimos"},{d:"20/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Amei atendimento",t:"Tudo ótimo"},{d:"21/07/2026",n:8,c:4,p:"Profissional",e:"Vinicius",m:"Falta organização",t:"Muito simpáticos"},{d:"21/07/2026",n:10,c:5,p:"Pessoa Física",e:"Vinicius",m:"Atendimento excelente",t:"Experiência impecável"},{d:"21/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Atendimento e organização",t:"Perfeito WhatsApp"},{d:"21/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Qualidade e atendimento",t:""},{d:"21/07/2026",n:9,c:4,p:"Profissional",e:"Vinicius",m:"Atendimento",t:"Demora postar"},{d:"21/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Modelos variados",t:""},{d:"21/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Qualidade",t:""},{d:"21/07/2026",n:10,c:5,p:"Pessoa Física",e:"Larissa",m:"Atendimento e preços",t:"Dúvidas rápido"},{d:"21/07/2026",n:9,c:4,p:"Profissional",e:"Vinicius",m:"Faltaram produtos",t:"Despachar rápido"},{d:"21/07/2026",n:10,c:5,p:"Pessoa Física",e:"Andrei",m:"Valores e entrega",t:"Receio de golpe"},{d:"22/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Atendimento",t:""},{d:"22/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Preços e atendimento",t:"Vinicius ajudou"},{d:"22/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Preço e qualidade",t:"Facilidade compra"},{d:"22/07/2026",n:10,c:5,p:"Pessoa Física",e:"Larissa",m:"Agilidade e atenção",t:""},{d:"22/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Bom atendimento",t:"Bom atendimento e preço"},{d:"22/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Nunca tive problemas",t:"Descontos ótimos"},{d:"22/07/2026",n:10,c:5,p:"Pessoa Física",e:"Larissa",m:"Variedade e rapidez",t:"Rapidez atendimento"},{d:"23/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Resolutivos qualidade",t:""},{d:"23/07/2026",n:10,c:5,p:"Pessoa Física",e:"Vinicius",m:"Atendimento objetivo",t:"Satisfeita"},{d:"23/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Variedade e preço",t:"Tá ótimo"},{d:"23/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Cupom desconto",t:"Nada!"},{d:"23/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Boas peças",t:"Melhorar prazo"},{d:"23/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Qualidade e preço",t:"Prata 925"},{d:"23/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Atendimento e laudo",t:""},{d:"23/07/2026",n:8,c:4,p:"Profissional",e:"Vinicius",m:"Versatilidade qualidade",t:"9 dias parada"},{d:"23/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Atendimento",t:"Joias erradas frequente"},{d:"24/07/2026",n:8,c:4,p:"Profissional",e:"Larissa",m:"Produto falta",t:""},{d:"24/07/2026",n:10,c:5,p:"Pessoa Física",e:"Larissa",m:"Lindos e qualidade",t:"Joias diferentes"},{d:"25/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Troca de joia",t:""},{d:"25/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Engraçada",t:""},{d:"25/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Resolução problemas",t:"Pronta resolução"},{d:"25/07/2026",n:10,c:4,p:"Profissional",e:"Larissa",m:"Atendimento rápido",t:"Qualidade e valores"},{d:"25/07/2026",n:10,c:5,p:"Profissional",e:"Larissa",m:"Joias qualidade",t:""},{d:"27/07/2026",n:9,c:4,p:"Pessoa Física",e:"Larissa",m:"Bom e rápido",t:"Peças titânio"},{d:"27/07/2026",n:10,c:5,p:"Profissional",e:"Vinicius",m:"Atendimento ótimo",t:""}];
-var filtro="tudo",dadosFiltrados=[...DADOS],hoje=new Date(2026,6,28);
-function parseD(s){var p=s.split("/");return new Date(p[2],p[1]-1,p[0])}
-function filtrar(t,b){filtro=t;document.querySelectorAll(".tab-btn").forEach(function(x){x.classList.remove("active")});b.classList.add("active");aplicar()}
-function filtrarPeriodo(){filtro="custom";document.querySelectorAll(".tab-btn").forEach(function(x){x.classList.remove("active")});aplicar()}
-function aplicar(){var arr=[...DADOS],analista=document.getElementById("filtroAnalista").value;
-if(analista!=="todos"){arr=arr.filter(function(x){return x.e===analista})}
-var di=document.getElementById("dataInicio").value,df=document.getElementById("dataFim").value;
-if(filtro==="dia"){var c=new Date(hoje);arr=arr.filter(function(x){return parseD(x.d).toDateString()===c.toDateString()})}
-else if(filtro==="semana"){var c=new Date(hoje);c.setDate(c.getDate()-7);arr=arr.filter(function(x){return parseD(x.d)>=c})}
-else if(filtro==="mes"){var c=new Date(hoje);c.setDate(c.getDate()-30);arr=arr.filter(function(x){return parseD(x.d)>=c})}
-else if(filtro==="custom"){if(di){var c=new Date(di);arr=arr.filter(function(x){return parseD(x.d)>=c})}if(df){var c2=new Date(df);c2.setDate(c2.getDate()+1);arr=arr.filter(function(x){return parseD(x.d)<=c2})}}
-dadosFiltrados=arr;render()}
-function render(){var d=dadosFiltrados,t=d.length;
-if(t===0){document.getElementById("nps").innerText="--";document.getElementById("csat").innerText="--";document.getElementById("media").innerText="--";document.getElementById("total").innerText="0";return}
-var pro=0,det=0,sN=0,c4=0;d.forEach(function(x){if(x.n>=9)pro++;else if(x.n<=6)det++;sN+=x.n;if(x.c>=4)c4++});
-var nps=((pro-det)/t)*100;
-document.getElementById("nps").innerText=nps.toFixed(1)+"%";document.getElementById("nps").style.color=nps>70?"#10B981":(nps>50?"#F59E0B":"#EF4444");
-document.getElementById("csat").innerText=(c4/t*100).toFixed(1)+"%";document.getElementById("media").innerText=(sN/t).toFixed(1);document.getElementById("total").innerText=t;
-desenhar("grafNps",[{l:"Promotores",v:pro,c:"#10B981"},{l:"Neutros",v:t-pro-det,c:"#F59E0B"},{l:"Detratores",v:det,c:"#EF4444"}]);
-var cs=[0,0,0,0,0];d.forEach(function(x){cs[x.c-1]++});desenhar("grafCsat",cs.map(function(v,i){return{l:(i+1)+"★",v:v,c:i+1>=4?"#10B981":"#D1D5DB"}}));
-esp(d);insights(d);com(d)}
-function desenhar(id,dat){var c=document.getElementById(id),ctx=c.getContext("2d"),w=c.width=c.offsetWidth,h=c.height=250;ctx.clearRect(0,0,w,h)
-var mx=Math.max.apply(null,dat.map(function(x){return x.v}));if(mx===0)return;var bw=(w/dat.length)*0.6,sp=(w/dat.length)*0.4
-dat.forEach(function(d,i){var bh=(d.v/mx)*(h-60),x=i*(bw+sp)+sp/2,y=h-bh-30;ctx.fillStyle=d.c;ctx.beginPath();ctx.roundRect(x,y,bw,bh,4);ctx.fill();ctx.fillStyle="#1F2937";ctx.font="bold 12px sans-serif";ctx.textAlign="center";ctx.fillText(d.v,x+bw/2,y-10);ctx.fillText(d.l,x+bw/2,h-10)})}
-function esp(d){var m={};d.forEach(function(x){var e=x.e||"Não informado";if(!m[e])m[e]={q:0,n:0,c:0};m[e].q++;m[e].n+=x.n;m[e].c+=x.c})
-var ord=Object.keys(m).sort(function(a,b){return m[b].n/m[b].q-m[a].n/m[a].q})
-document.getElementById("tabEsp").innerHTML=ord.map(function(e){var o=m[e];return"<tr><td><strong>"+e+"</strong></td><td>"+o.q+"</td><td>"+(o.n/o.q).toFixed(1)+"</td><td>"+(o.c/o.q).toFixed(1)+"</td></tr>"}).join("")}
-function insights(d){
-var pro=d.filter(function(x){return x.n>=9}),neu=d.filter(function(x){return x.n>=7&&x.n<=8}),det=d.filter(function(x){return x.n<=6});
-var csatBom=d.filter(function(x){return x.c>=4}),csatRuim=d.filter(function(x){return x.c<=2});
-document.getElementById("insightsNps").innerHTML=
-'<p><strong>✅ Forças NPS:</strong> Atendimento personalizado, qualidade das joias, variedade de produtos e preços justos.</p>'+
-'<p><strong>⚠️ Riscos NPS:</strong> Prazo de entrega (citação em 4 detratores), erros em pedidos (joias erradas/faltando).</p>'+
-'<p><strong>📍 Principal dor:</strong> "Demora na postagem" + "Peças erradas" = 75% dos detratores.</p>';
-document.getElementById("insightsCsat").innerHTML=
-'<p><strong>✅ Forças CSAT:</strong> Atendimento educado (nota 5), suporte pós-venda, resolução de problemas.</p>'+
-'<p><strong>⚠️ Riscos CSAT:</strong> Notas 4 concentram reclamações de prazo. Notas ≤3 têm relação direta com erro no pedido.</p>'+
-'<p><strong>📍 Padrão:</strong> Cliente que dá CSAT 4 mas NPS baixo = ainda está disposto a negociar. Agir rápido.</p>';
-document.getElementById("nuvem").innerHTML=
-'<span class="tag tag-pos">Atendimento</span><span class="tag tag-pos">Qualidade</span><span class="tag tag-pos">Preço</span><span class="tag tag-pos">Variedade</span><span class="tag tag-pos">Rapidez</span>'+
-'<span class="tag tag-pos">Cordialidade</span><span class="tag tag-pos">Suporte</span><span class="tag tag-pos">Resolução</span>'+
-'<span class="tag tag-neg">Demora</span><span class="tag tag-neg">Entrega</span><span class="tag tag-neg">Estoque</span><span class="tag tag-neg">Erro</span><span class="tag tag-neg">Postagem</span><span class="tag tag-neg">Separação</span>';
+var CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vRHcKSrSXFBcF8A4fQIR3xxg-7G_PlzA6udtxxfKVpDAP_p1Op1ZHbX8ND8jTgPfgU6Le7MjaYTXRby/pub?output=csv';
+var DADOS=[],filtro="tudo",dadosFiltrados=[],hoje=new Date();
+hoje.setFullYear(2026,6,28);
+
+function parseCSV(t){
+var linhas=[],cur=[],campo='',aspas=false;
+for(var i=0;i<t.length;i++){
+var c=t[i];
+if(aspas){
+if(c=='"'){if(i+1<t.length&&t[i+1]=='"'){campo+='"';i++}else{aspas=false}}
+else campo+=c;
+}else{
+if(c=='"')aspas=true;
+else if(c==','){cur.push(campo);campo=''}
+else if(c=='\n'){cur.push(campo);campo='';if(cur.length>1)linhas.push(cur);cur=[]}
+else if(c=='\r'){}
+else campo+=c;
 }
-function com(d){document.getElementById("tabCom").innerHTML=d.slice(0,30).map(function(x){var t="row-neutro";if(x.n>=9)t="row-promotor";if(x.n<=6)t="row-detrator";return'<tr class="'+t+'"><td>'+x.d+'</td><td>'+x.p+'</td><td>'+(x.e||"-")+'</td><td><strong>'+x.n+'</strong></td><td>'+x.c+'</td><td><strong>'+x.m+'</strong><br><em>'+x.t+'</em></td></tr>'}).join("")}
-function exportar(){var n=document.getElementById("nps").innerText,t=document.getElementById("total").innerText;navigator.clipboard.writeText("INFINITY PIERCING - Relatório\nNPS: "+n+"\nRespostas: "+t+"\n---\nNPS: Atendimento é força, logística é risco. CSAT: suporte brilha, prazo derranta.").then(function(){alert("Copiado!")})}
-window.onload=aplicar;
+}
+if(cur.length>1)linhas.push(cur);
+return linhas;
+}
+
+function parseData(str){
+var p=str.split(' ')[0].split('/');
+return new Date(p[2],p[1]-1,p[0]);
+}
+
+function carregarDados(){
+var st=document.getElementById('statusTopo');
+// Tenta carregar do cache primeiro
+var cache=localStorage.getItem('infinity_cache');
+if(cache){try{DADOS=JSON.parse(cache);st.innerHTML='📦 Dados salvos ('+DADOS.length+' respostas)';aplicar()}catch(e){}}
+// Busca da planilha
+fetch(CSV_URL).then(function(r){return r.text()}).then(function(txt){
+var linhas=parseCSV(txt);
+if(linhas.length<2)return;
+// Pula header (linha 0), mapeia dados
+var dados=[];
+for(var i=1;i<linhas.length;i++){
+var col=linhas[i];
+if(col.length<4)continue;
+var nps=parseInt(col[3])||0,csat=parseInt(col[6])||0;
+if(nps<0||nps>10)continue;
+dados.push({
+d:(col[0]||'').split(' ')[0],
+n:nps,
+c:csat,
+p:col[2]||'',
+e:col[5]||'',
+m:col[4]||'',
+t:col[7]||''
+});
+}
+if(dados.length>0){
+DADOS=dados;
+localStorage.setItem('infinity_cache',JSON.stringify(dados));
+st.innerHTML='✅ Ao vivo ('+dados.length+' respostas)';
+aplicar();
+}
+}).catch(function(){
+st.innerHTML='📦 Dados offline (cache)';
+if(DADOS.length==0){st.innerHTML='⚠️ Sem dados. Recarregue.'}
+});
+}
+
+var filtro="tudo",dadosFiltrados=[],hoje=new Date(2026,6,28);
+
+function parseD(s){
+if(!s||s.length<8)return hoje;
+var p=s.split('/');
+return new Date(p[2],p[1]-1,p[0]);
+}
+
+function filtrar(t,b){
+filtro=t;
+document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});
+b.classList.add('active');
+aplicar();
+}
+
+function filtrarPeriodo(){
+filtro='custom';
+document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});
+aplicar();
+}
+
+function aplicar(){
+var arr=[];
+for(var i=0;i<DADOS.length;i++)arr.push(DADOS[i]);
+var analista=document.getElementById('filtroAnalista').value;
+if(analista!=='todos'){arr=arr.filter(function(x){return x.e===analista})}
+var di=document.getElementById('dataInicio').value,df=document.getElementById('dataFim').value;
+if(filtro==='dia'){var c=new Date(hoje);arr=arr.filter(function(x){return parseD(x.d).toDateString()===c.toDateString()})}
+else if(filtro==='semana'){var c=new Date(hoje);c.setDate(c.getDate()-7);arr=arr.filter(function(x){return parseD(x.d)>=c})}
+else if(filtro==='mes'){var c=new Date(hoje);c.setDate(c.getDate()-30);arr=arr.filter(function(x){return parseD(x.d)>=c})}
+else if(filtro==='custom'){if(di){var c=new Date(di);arr=arr.filter(function(x){return parseD(x.d)>=c})}if(df){var c2=new Date(df);c2.setDate(c2.getDate()+1);arr=arr.filter(function(x){return parseD(x.d)<=c2})}}
+dadosFiltrados=arr;render();
+}
+
+function render(){
+var d=dadosFiltrados,t=d.length;
+if(t===0){document.getElementById('nps').innerText='--';document.getElementById('csat').innerText='--';document.getElementById('media').innerText='--';document.getElementById('total').innerText='0';return}
+var pro=0,det=0,sN=0,c4=0;
+for(var i=0;i<t;i++){var x=d[i];if(x.n>=9)pro++;else if(x.n<=6)det++;sN+=x.n;if(x.c>=4)c4++}
+var nps=((pro-det)/t)*100;
+document.getElementById('nps').innerText=nps.toFixed(1)+'%';document.getElementById('nps').style.color=nps>70?'#10B981':(nps>50?'#F59E0B':'#EF4444');
+document.getElementById('csat').innerText=(c4/t*100).toFixed(1)+'%';document.getElementById('media').innerText=(sN/t).toFixed(1);document.getElementById('total').innerText=t;
+desenhar('grafNps',[{l:'Promotores',v:pro,c:'#10B981'},{l:'Neutros',v:t-pro-det,c:'#F59E0B'},{l:'Detratores',v:det,c:'#EF4444'}]);
+var cs=[0,0,0,0,0];for(var i=0;i<t;i++){var ci=d[i].c;if(ci>=1&&ci<=5)cs[ci-1]++}
+desenhar('grafCsat',cs.map(function(v,i){return{l:(i+1)+'★',v:v,c:i+1>=4?'#10B981':'#D1D5DB'}}));
+esp(d);insights(d);com(d);
+}
+
+function desenhar(id,dat){
+var c=document.getElementById(id),ctx=c.getContext('2d'),w=c.width=c.offsetWidth,h=c.height=250;ctx.clearRect(0,0,w,h);
+var mx=0;for(var i=0;i<dat.length;i++)if(dat[i].v>mx)mx=dat[i].v;
+if(mx===0)return;
+var bw=(w/dat.length)*0.6,sp=(w/dat.length)*0.4;
+for(var i=0;i<dat.length;i++){var d=dat[i],bh=(d.v/mx)*(h-60),x=i*(bw+sp)+sp/2,y=h-bh-30;ctx.fillStyle=d.c;ctx.fillRect(x,y,bw,bh);ctx.fillStyle='#1F2937';ctx.font='bold 12px sans-serif';ctx.textAlign='center';ctx.fillText(d.v,x+bw/2,y-10);ctx.fillText(d.l,x+bw/2,h-10)}
+}
+
+function esp(d){
+var m={};
+for(var i=0;i<d.length;i++){var e=d[i].e||'Não informado';if(!m[e])m[e]={q:0,n:0,c:0};m[e].q++;m[e].n+=d[i].n;m[e].c+=d[i].c}
+var ord=Object.keys(m).sort(function(a,b){return m[b].n/m[b].q-m[a].n/m[a].q});
+var html='';
+for(var i=0;i<ord.length;i++){var o=m[ord[i]];html+='<tr><td><strong>'+ord[i]+'</strong></td><td>'+o.q+'</td><td>'+(o.n/o.q).toFixed(1)+'</td><td>'+(o.c/o.q).toFixed(1)+'</td></tr>'}
+document.getElementById('tabEsp').innerHTML=html;
+}
+
+function insights(d){
+document.getElementById('insightsNps').innerHTML='<p><strong>✅ Forças:</strong> Atendimento personalizado, qualidade das joias, variedade, preço.</p><p><strong>⚠️ Riscos:</strong> Prazo de entrega e erros em pedidos são os principais detratores.</p>';
+document.getElementById('insightsCsat').innerHTML='<p><strong>✅ Forças:</strong> Atendimento nota 5, suporte pós-venda, resolução de problemas.</p><p><strong>⚠️ Riscos:</strong> Notas ≤3 têm relação direta com erro no pedido enviado.</p>';
+document.getElementById('nuvem').innerHTML='<span class="tag tag-pos">Atendimento</span><span class="tag tag-pos">Qualidade</span><span class="tag tag-pos">Preço</span><span class="tag tag-pos">Variedade</span><span class="tag tag-pos">Rapidez</span><span class="tag tag-pos">Cordialidade</span><span class="tag tag-pos">Resolução</span><span class="tag tag-neg">Demora</span><span class="tag tag-neg">Entrega</span><span class="tag tag-neg">Estoque</span><span class="tag tag-neg">Erro</span><span class="tag tag-neg">Postagem</span><span class="tag tag-neg">Separação</span>';
+}
+
+function com(d){
+var html='';
+var max=Math.min(30,d.length);
+for(var i=0;i<max;i++){
+var x=d[i],t='row-neutro';if(x.n>=9)t='row-promotor';if(x.n<=6)t='row-detrator';
+html+='<tr class="'+t+'"><td>'+x.d+'</td><td>'+x.p+'</td><td>'+(x.e||'-")+'</td><td><strong>'+x.n+'</strong></td><td>'+x.c+'</td><td><strong>'+x.m+'</strong><br><em>'+(x.t||'')+'</em></td></tr>'
+}
+document.getElementById('tabCom').innerHTML=html;
+}
+
+function exportar(){
+var n=document.getElementById('nps').innerText,t=document.getElementById('total').innerText;
+navigator.clipboard.writeText('INFINITY PIERCING - Relatorio '+new Date().toLocaleDateString()+'\nNPS: '+n+'\nRespostas: '+t).then(function(){alert('Copiado!')});
+}
+
+window.onload=carregarDados;
 </script>
 </body>
 </html>
