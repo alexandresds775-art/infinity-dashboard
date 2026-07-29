@@ -90,7 +90,7 @@ td{padding:.6rem;border-bottom:1px solid #F3F4F6}
 var SCRIPT_URL='https://script.google.com/macros/s/AKfycbylxWs9mwYGxS32_BmCTay-6WVEXA8tRlhPXJXTHKvZoE3PHAds6yyNLfI-TTKcpFlbow/exec';
 var CACHE_KEY='infinity_data';
 var DADOS=[],dadosFiltrados=[],filtro='tudo';
-var hoje=new Date(2026,6,28);
+var hoje=new Date(2026,6,29);
 
 function parseD(s){
 if(!s||s.length&lt;6)return hoje;
@@ -114,7 +114,9 @@ try{localStorage.setItem(CACHE_KEY,JSON.stringify(dados))}catch(e){}
 st('✅ Ao vivo ('+dados.length+')','green');
 aplicar();
 }else{st('⚠️ Sem dados','red')}
-}).catch(function(e){st('⚠️ Erro no servidor','red');setTimeout(carregar,3000);});
+}).catch(function(e){
+st('⚠️ Erro no servidor','red');
+});
 }
 
 function filtrar(t,b){
@@ -134,8 +136,7 @@ if(ana!=='todos')arr=arr.filter(function(x){return x.e===ana});
 var di=document.getElementById('dInicio').value,df=document.getElementById('dFim').value;
 
 if(filtro==='dia'){
-// Pega a data de hoje formatada como dd/mm/aaaa e compara direto com a string
-var d=new Date();d.setHours(0,0,0,0);
+var d=new Date();
 var dd=String(d.getDate()).padStart(2,'0');
 var mm=String(d.getMonth()+1).padStart(2,'0');
 var yyyy=d.getFullYear();
@@ -193,10 +194,9 @@ document.getElementById('nuvem').innerHTML='<span class="tag tag-pos">Atendiment
 }
 
 function com(d){
-// Inverte a ordem: mais recentes primeiro
 var rev=[];
 for(var i=d.length-1;i>=0;i--)rev.push(d[i]);
-var html='',max=Math.min(rev.length,100);
+var html='',max=Math.min(rev.length,200);
 for(var i=0;i<max;i++){var x=rev[i],t='row-neutro';if(x.n>=9)t='row-promotor';if(x.n<=6)t='row-detrator';html+='<tr class="'+t+'"><td>'+x.d+'</td><td>'+x.p+'</td><td>'+(x.e||'-')+'</td><td><strong>'+x.n+'</strong></td><td>'+x.c+'</td><td><strong>'+x.m+'</strong><br><em>'+(x.t||'')+'</em></td></tr>'}
 document.getElementById('tCom').innerHTML=html;
 }
