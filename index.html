@@ -87,13 +87,12 @@ td{padding:.6rem;border-bottom:1px solid #F3F4F6}
 </div>
 </div>
 <script>
-var SCRIPT_URL='https://script.google.com/macros/s/AKfycbylxWs9mwYGxS32_BmCTay-6WVEXA8tRlhPXJXTHKvZoE3PHAds6yyNLfI-TTKcpFlbow/exec';
+var SCRIPT_URL='https://script.google.com/macros/s/AKfycby8vCGgwNkL-4JpJTc6fXaQi14TNfDcyiDW6MEyNtc-2MPGCTOETyqmJeQUF8sSXlTrHw/exec';
 var CACHE_KEY='infinity_data';
 var DADOS=[],dadosFiltrados=[],filtro='tudo';
-var hoje=new Date(2026,6,29);
 
 function parseD(s){
-if(!s||s.length&lt;6)return hoje;
+if(!s||s.length<6)return new Date();
 var p=s.split(' ')[0].split('/');
 return new Date(Number(p[2]),Number(p[1])-1,Number(p[0]));
 }
@@ -114,9 +113,7 @@ try{localStorage.setItem(CACHE_KEY,JSON.stringify(dados))}catch(e){}
 st('✅ Ao vivo ('+dados.length+')','green');
 aplicar();
 }else{st('⚠️ Sem dados','red')}
-}).catch(function(e){
-st('⚠️ Erro no servidor','red');
-});
+}).catch(function(e){st('⚠️ Erro no servidor','red')});
 }
 
 function filtrar(t,b){
