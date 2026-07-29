@@ -93,7 +93,7 @@ var DADOS=[],dadosFiltrados=[],filtro='tudo';
 var hoje=new Date(2026,6,28);
 
 function parseD(s){
-if(!s||s.length<6)return hoje;
+if(!s||s.length&lt;6)return hoje;
 var p=s.split(' ')[0].split('/');
 return new Date(Number(p[2]),Number(p[1])-1,Number(p[0]));
 }
@@ -103,24 +103,18 @@ function st(msg,cor){var e=document.getElementById('status');e.textContent=msg;e
 function carregar(){
 st('⏳ Carregando...','yellow');
 try{var c=localStorage.getItem(CACHE_KEY);if(c){DADOS=JSON.parse(c);if(DADOS.length>0){st('📦 Cache ('+DADOS.length+')','yellow');aplicar()}}}catch(e){}
-
 fetch(SCRIPT_URL).then(function(r){return r.json()}).then(function(d){
 if(d&&d.length>0){
 var dados=d;
 for(var i=0;i<dados.length;i++){
-var x=dados[i];
-x.n=Number(x.n)||0;x.c=Number(x.c)||5;
-x.d=x.d||'';x.p=x.p||'';x.e=x.e||'';x.m=x.m||'';x.t=x.t||'';
+var x=dados[i];x.n=Number(x.n)||0;x.c=Number(x.c)||5;x.d=x.d||'';x.p=x.p||'';x.e=x.e||'';x.m=x.m||'';x.t=x.t||'';
 }
 DADOS=dados;
 try{localStorage.setItem(CACHE_KEY,JSON.stringify(dados))}catch(e){}
 st('✅ Ao vivo ('+dados.length+')','green');
 aplicar();
 }else{st('⚠️ Sem dados','red')}
-}).catch(function(e){
-st('⚠️ Erro no servidor','red');
-setTimeout(carregar,3000);
-});
+}).catch(function(e){st('⚠️ Erro no servidor','red');setTimeout(carregar,3000);});
 }
 
 function filtrar(t,b){
@@ -140,13 +134,18 @@ if(ana!=='todos')arr=arr.filter(function(x){return x.e===ana});
 var di=document.getElementById('dInicio').value,df=document.getElementById('dFim').value;
 
 if(filtro==='dia'){
-var c=new Date(hoje);
-arr=arr.filter(function(x){return parseD(x.d).toDateString()===c.toDateString()});
+// Pega a data de hoje formatada como dd/mm/aaaa e compara direto com a string
+var d=new Date();d.setHours(0,0,0,0);
+var dd=String(d.getDate()).padStart(2,'0');
+var mm=String(d.getMonth()+1).padStart(2,'0');
+var yyyy=d.getFullYear();
+var hojeStr=dd+'/'+mm+'/'+yyyy;
+arr=arr.filter(function(x){return x.d===hojeStr});
 }else if(filtro==='semana'){
-var c=new Date(hoje);c.setDate(c.getDate()-7);
+var c=new Date();c.setDate(c.getDate()-7);c.setHours(0,0,0,0);
 arr=arr.filter(function(x){return parseD(x.d)>=c});
 }else if(filtro==='mes'){
-var c=new Date(hoje);c.setDate(c.getDate()-30);
+var c=new Date();c.setDate(c.getDate()-30);c.setHours(0,0,0,0);
 arr=arr.filter(function(x){return parseD(x.d)>=c});
 }else if(filtro==='custom'){
 if(di){var c=new Date(di+'T00:00:00');arr=arr.filter(function(x){return parseD(x.d)>=c})}
@@ -194,8 +193,11 @@ document.getElementById('nuvem').innerHTML='<span class="tag tag-pos">Atendiment
 }
 
 function com(d){
-var html='',max=Math.min(40,d.length);
-for(var i=0;i<max;i++){var x=d[i],t='row-neutro';if(x.n>=9)t='row-promotor';if(x.n<=6)t='row-detrator';html+='<tr class="'+t+'"><td>'+x.d+'</td><td>'+x.p+'</td><td>'+(x.e||'-')+'</td><td><strong>'+x.n+'</strong></td><td>'+x.c+'</td><td><strong>'+x.m+'</strong><br><em>'+(x.t||'')+'</em></td></tr>'}
+// Inverte a ordem: mais recentes primeiro
+var rev=[];
+for(var i=d.length-1;i>=0;i--)rev.push(d[i]);
+var html='',max=Math.min(rev.length,100);
+for(var i=0;i<max;i++){var x=rev[i],t='row-neutro';if(x.n>=9)t='row-promotor';if(x.n<=6)t='row-detrator';html+='<tr class="'+t+'"><td>'+x.d+'</td><td>'+x.p+'</td><td>'+(x.e||'-')+'</td><td><strong>'+x.n+'</strong></td><td>'+x.c+'</td><td><strong>'+x.m+'</strong><br><em>'+(x.t||'')+'</em></td></tr>'}
 document.getElementById('tCom').innerHTML=html;
 }
 
